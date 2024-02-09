@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Creer joueur - QPUC{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Ajouter un participantt</h1>
+            {{ include('participant/_form.html.twig') }}
+
+            {# <a href="{{ path('app_participant_index') }}">back to list</a> #}
+        </div>
+    </div>
+</div>
+{% endblock %}
