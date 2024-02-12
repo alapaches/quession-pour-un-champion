@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Equipe</th>
@@ -18,7 +17,6 @@
         <tbody>
         {% for participant in participants %}
             <tr>
-                <td>{{ participant.id }}</td>
                 <td>{{ participant.nom }}</td>
                 <td>{{ participant.prenom }}</td>
                 <td>{{ participant.equipe.nom }}</td>
