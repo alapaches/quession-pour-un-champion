@@ -7,5 +7,7 @@
  */
 import './styles/app.scss'
 import '../node_modules/bootstrap/dist/js/bootstrap'
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉')

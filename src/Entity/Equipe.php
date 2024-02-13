@@ -21,9 +21,13 @@ class Equipe
     #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Participant::class, orphanRemoval: true)]
     private Collection $participants;
 
+    #[ORM\ManyToMany(targetEntity: Score::class, mappedBy: 'equipe')]
+    private Collection $scores;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
+        $this->scores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,6 +72,33 @@ class Equipe
             if ($participant->getEquipe() === $this) {
                 $participant->setEquipe(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Score>
+     */
+    public function getScores(): Collection
+    {
+        return $this->scores;
+    }
+
+    public function addScore(Score $score): static
+    {
+        if (!$this->scores->contains($score)) {
+            $this->scores->add($score);
+            $score->addEquipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScore(Score $score): static
+    {
+        if ($this->scores->removeElement($score)) {
+            $score->removeEquipe($this);
         }
 
         return $this;

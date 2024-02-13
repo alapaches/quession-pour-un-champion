@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Participant{% endblock %}
+{% block title %}Joueur : {{ participant.nom }}{% endblock %}
 
 {% block body %}
     <h1>Participant</h1>
 
-    <table class="table">
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -22,9 +22,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_index') }}">back to list</a>
-
-    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+    <a class="btn btn-xs btn-secondary btn-retour" role="button" href="{{ path('app_participant_index') }}">
+        <i class="fa-solid fa-left-long"></i> Retour à la liste
+    </a>
+    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_participant_edit', {'id': equipe.id}) }}">
+        <i class="fa-solid fa-pen-to-square"></i> Modifier
+    </a>
 
     {{ include('participant/_delete_form.html.twig') }}
 {% endblock %}

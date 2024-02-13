@@ -1,5 +1,9 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <a class="btn btn-xs btn-warning" href="{{ path('app_equipe_index') }}">Retour</a>
-    <button class="btn btn-xs btn-success">{{ button_label|default('Enregistrer') }}</button>
+    <a class="btn btn-xs btn-danger" href="{{ path('app_equipe_index') }}">
+        <i class="fa-solid fa-left-long"></i> Retour
+    </a>
+    <button class="btn btn-xs btn-success">
+        <i class="fa-solid fa-check"></i> {{ button_label|default('Enregistrer') }}
+    </button>
 {{ form_end(form) }}

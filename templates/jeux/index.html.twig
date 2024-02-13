@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Equipes{% endblock %}
+{% block title %}Liste des jeux{% endblock %}
 
 {% block body %}
-    <h1>Liste des équipes</h1>
+    <h1>Liste des jeux</h1>
 
     <table class="table table-bordered">
         <thead>
@@ -13,27 +13,27 @@
             </tr>
         </thead>
         <tbody>
-        {% for equipe in equipes %}
+        {% for jeux in jeuxes %}
             <tr>
-                <td>{{ equipe.nom }}</td>
+                <td>{{ jeux.nom }}</td>
                 <td>
-                    <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_equipe_show', {'id': equipe.id}) }}">
+                    <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': equipe.id}) }}">
                         <i class="fa-solid fa-eye"></i> Voir
                     </a>
-                    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">
+                    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': equipe.id}) }}">
                         <i class="fa-solid fa-pen-to-square"></i> Modifier
                     </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="2">Aucune donnée n'est disponible</td>
+                <td class="center" colspan="2">Aucune donnée n'est disponible</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a class="btn btn-xs btn-success" role="button" href="{{ path('app_equipe_new') }}">
-        <i class="fa-solid fa-plus"></i> Ajouter une équipe
+    <a class="btn btn-xs btn-success" role="button" href="{{ path('app_jeux_new') }}">
+        <i class="fa-solid fa-plus"></i> Ajouter un jeu
     </a>
 {% endblock %}
