@@ -3,13 +3,10 @@
 {% block title %}Modifier équipe{% endblock %}
 
 {% block body %}
+    <h1>Modifier équipe</h1>
     <div class="container">
         <div class="row">
-            <h1>Modifier équipe</h1>
             {{ include('equipe/_form.html.twig', {'button_label': 'Update'}) }}
-
-            <a href="{{ path('app_equipe_index') }}">back to list</a>
-
             {{ include('equipe/_delete_form.html.twig') }}
         </div>
     </div>

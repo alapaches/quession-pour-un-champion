@@ -3,20 +3,20 @@
 {% block title %}Liste des jeux{% endblock %}
 
 {% block body %}
-    <h1>Liste des jeux</h1>
+    <h1 class="center page-title">Liste des jeux</h1>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>actions</th>
+                <th class="center">Nom</th>
+                <th class="center">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for jeux in jeuxes %}
             <tr>
-                <td>{{ jeux.nom }}</td>
-                <td>
+                <td class="center">{{ jeux.nom }}</td>
+                <td class="center">
                     <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': equipe.id}) }}">
                         <i class="fa-solid fa-eye"></i> Voir
                     </a>

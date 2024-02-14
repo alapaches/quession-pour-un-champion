@@ -3,26 +3,30 @@
 {% block title %}Liste des participants{% endblock %}
 
 {% block body %}
-    <h1>Liste des participants</h1>
+    <h1 class="center page-title">Liste des participants</h1>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Equipe</th>
-                <th>actions</th>
+                <th class="center">Nom</th>
+                <th class="center">Prenom</th>
+                <th class="center">Equipe</th>
+                <th class="center">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for participant in participants %}
             <tr>
-                <td>{{ participant.nom }}</td>
-                <td>{{ participant.prenom }}</td>
-                <td>{{ participant.equipe.nom }}</td>
-                <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+                <td class="center">{{ participant.nom }}</td>
+                <td class="center">{{ participant.prenom }}</td>
+                <td class="center">{{ participant.equipe.nom }}</td>
+                <td class="center">
+                    <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_participant_show', {'id': participant.id}) }}">
+                        <i class="fa-solid fa-eye"></i> Voir
+                    </a>
+                    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_participant_edit', {'id': participant.id}) }}">
+                        <i class="fa-solid fa-pen-to-square"></i> Modifier
+                    </a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +36,7 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_participant_new') }}">Create new</a>
+    <a class="btn btn-xs btn-success" role="button" href="{{ path('app_participant_new') }}">
+        <i class="fa-solid fa-plus"></i> Ajouter un participant
+    </a>
 {% endblock %}

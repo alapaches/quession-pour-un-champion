@@ -3,21 +3,21 @@
 {% block title %}Joueur : {{ participant.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Participant</h1>
+    <h1 class="center page-title">Participant</h1>
 
     <table class="table table-bordered">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ participant.id }}</td>
+                <th class="center">Id</th>
+                <td class="center">{{ participant.id }}</td>
             </tr>
             <tr>
-                <th>Nom</th>
-                <td>{{ participant.nom }}</td>
+                <th class="center">Nom</th>
+                <td class="center">{{ participant.nom }}</td>
             </tr>
             <tr>
-                <th>Prenom</th>
-                <td>{{ participant.prenom }}</td>
+                <th class="center">Prenom</th>
+                <td class="center">{{ participant.prenom }}</td>
             </tr>
         </tbody>
     </table>

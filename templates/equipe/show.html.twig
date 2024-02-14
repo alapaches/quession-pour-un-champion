@@ -3,17 +3,17 @@
 {% block title %}Equipe : {{ equipe.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Equipe : {{ equipe.nom }}</h1>
+    <h1 class="center page-title">Equipe : {{ equipe.nom }}</h1>
 
     <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="center">Nom</th>
+            </tr>
+        </thead>
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ equipe.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ equipe.nom }}</td>
+                <td class="center">{{ equipe.nom }}</td>
             </tr>
         </tbody>
     </table>

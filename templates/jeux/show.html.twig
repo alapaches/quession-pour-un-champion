@@ -3,17 +3,13 @@
 {% block title %}Jeu: {{ jeux.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Jeu: {{ jeux.nom }}</h1>
+    <h1 class="center page-title">Jeu: {{ jeux.nom }}</h1>
 
     <table class="table table-bordered">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ jeux.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ jeux.nom }}</td>
+                <th class="center">Nom</th>
+                <td class="center">{{ jeux.nom }}</td>
             </tr>
         </tbody>
     </table>
