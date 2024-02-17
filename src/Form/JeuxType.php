@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Jeux;
-use App\Entity\Score;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,10 +14,6 @@ class JeuxType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('score', EntityType::class, [
-                'class' => Score::class,
-'choice_label' => 'id',
-            ])
         ;
     }
 

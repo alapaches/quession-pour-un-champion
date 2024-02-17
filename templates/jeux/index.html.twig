@@ -4,36 +4,39 @@
 
 {% block body %}
     <h1 class="center page-title">Liste des jeux</h1>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th class="center">Nom</th>
-                <th class="center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for jeux in jeuxes %}
-            <tr>
-                <td class="center">{{ jeux.nom }}</td>
-                <td class="center">
-                    <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': equipe.id}) }}">
-                        <i class="fa-solid fa-eye"></i> Voir
-                    </a>
-                    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': equipe.id}) }}">
-                        <i class="fa-solid fa-pen-to-square"></i> Modifier
-                    </a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td class="center" colspan="2">Aucune donnée n'est disponible</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a class="btn btn-xs btn-success" role="button" href="{{ path('app_jeux_new') }}">
-        <i class="fa-solid fa-plus"></i> Ajouter un jeu
-    </a>
+    <div class="center">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="center">Nom</th>
+                    <th class="center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for jeux in jeuxes %}
+                <tr>
+                    <td class="center">{{ jeux.nom }}</td>
+                    <td class="center">
+                        <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': jeux.id}) }}">
+                            <i class="fa-solid fa-eye"></i> Voir
+                        </a>
+                        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': jeux.id}) }}">
+                            <i class="fa-solid fa-pen-to-square"></i> Modifier
+                        </a>
+                        <a class="btn btn-xs btn-success" role="button" href="{{ path('app_jeux_play', {'id': jeux.id}) }}">
+                            <i class="fa-solid fa-play"></i> Jouer
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="center" colspan="2">Aucune donnée n'est disponible</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-xs btn-primary" role="button" href="{{ path('app_jeux_new') }}">
+            <i class="fa-solid fa-plus"></i> Ajouter un jeu
+        </a>
+    </div>
 {% endblock %}

@@ -4,23 +4,21 @@
 
 {% block body %}
     <h1 class="center page-title">Jeu: {{ jeux.nom }}</h1>
-
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <th class="center">Nom</th>
-                <td class="center">{{ jeux.nom }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a class="btn btn-xs btn-secondary btn-retour" role="button" href="{{ path('app_jeux_index') }}">
-        <i class="fa-solid fa-left-long"></i> Retour à la liste
-    </a>
-
-    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': equipe.id}) }}">
-        <i class="fa-solid fa-pen-to-square"></i> Modifier
-    </a>
-
-    {{ include('jeux/_delete_form.html.twig') }}
+    <div class="center">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th class="center">Nom</th>
+                    <td class="center">{{ jeux.nom }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-xs btn-secondary btn-retour" role="button" href="{{ path('app_jeux_index') }}">
+            <i class="fa-solid fa-left-long"></i> Retour à la liste
+        </a>
+        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': jeux.id}) }}">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+        {{ include('jeux/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

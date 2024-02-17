@@ -68,6 +68,14 @@ class JeuxController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/play', name: 'app_jeux_play', methods: ['GET', 'POST'])]
+    public function play(Request $request, Jeux $jeu, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('jeux/running.html.twig', [
+            'jeux' => $jeu,
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]
     public function delete(Request $request, Jeux $jeux, EntityManagerInterface $entityManager): Response
     {
