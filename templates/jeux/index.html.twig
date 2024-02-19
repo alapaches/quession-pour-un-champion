@@ -13,17 +13,17 @@
                 </tr>
             </thead>
             <tbody>
-            {% for jeux in jeuxes %}
+            {% for jeu in jeux %}
                 <tr>
-                    <td class="center">{{ jeux.nom }}</td>
+                    <td class="center">{{ jeu.nom }}</td>
                     <td class="center">
-                        <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': jeux.id}) }}">
+                        <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_jeux_show', {'id': jeu.id}) }}">
                             <i class="fa-solid fa-eye"></i> Voir
                         </a>
-                        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': jeux.id}) }}">
+                        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_jeux_edit', {'id': jeu.id}) }}">
                             <i class="fa-solid fa-pen-to-square"></i> Modifier
                         </a>
-                        <a class="btn btn-xs btn-success" role="button" href="{{ path('app_jeux_play', {'id': jeux.id}) }}">
+                        <a class="btn btn-xs btn-success" role="button" href="{{ path('app_jeux_play', {'id': jeu.id}) }}">
                             <i class="fa-solid fa-play"></i> Jouer
                         </a>
                     </td>

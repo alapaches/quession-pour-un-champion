@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des questions{% endblock %}
+
+{% block body %}
+    <h1 class="center page-title">Liste des questions</h1>
+    <div class="center">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="center">Intitule</th>
+                    <th class="center">Jeu associé</th>
+                    <th class="center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for question in questions %}
+                <tr>
+                    <td class="center">{{ question.intitule }}</td>
+                    <td class="center">{{ question.jeu.nom }}</td>
+                    <td class="center">
+                        <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_question_show', {'id': question.id}) }}">
+                            <i class="fa-solid fa-eye"></i> Voir
+                        </a>
+                        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_question_edit', {'id': question.id}) }}">
+                            <i class="fa-solid fa-pen-to-square"></i> Modifier
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucune donnée n'est disponible</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a class="btn btn-xs btn-primary" role="button" href="{{ path('app_question_new') }}">
+            <i class="fa-solid fa-plus"></i> Ajouter une question
+        </a>
+    </div>
+{% endblock %}
