@@ -4,36 +4,36 @@
 
 {% block body %}
     <h1 class="center page-title">Liste des équipes</h1>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th class="center">Nom</th>
-                <th class="center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for equipe in equipes %}
-            <tr>
-                <td class="center">{{ equipe.nom }}</td>
-                <td class="center">
-                    <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_equipe_show', {'id': equipe.id}) }}">
-                        <i class="fa-solid fa-eye"></i> Voir
-                    </a>
-                    <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">
-                        <i class="fa-solid fa-pen-to-square"></i> Modifier
-                    </a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune donnée n'est disponible</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a class="btn btn-xs btn-primary" role="button" href="{{ path('app_equipe_new') }}">
-        <i class="fa-solid fa-plus"></i> Ajouter une équipe
-    </a>
+    <div class="center">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="center">Nom</th>
+                    <th class="center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for equipe in equipes %}
+                <tr>
+                    <td class="center">{{ equipe.nom }}</td>
+                    <td class="center">
+                        <a class="btn btn-xs btn-secondary" role="button" href="{{ path('app_equipe_show', {'id': equipe.id}) }}">
+                            <i class="fa-solid fa-eye"></i> Voir
+                        </a>
+                        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_equipe_edit', {'id': equipe.id}) }}">
+                            <i class="fa-solid fa-pen-to-square"></i> Modifier
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucune donnée n'est disponible</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-xs btn-primary" role="button" href="{{ path('app_equipe_new') }}">
+            <i class="fa-solid fa-plus"></i> Ajouter une équipe
+        </a>
+    </div>
 {% endblock %}
