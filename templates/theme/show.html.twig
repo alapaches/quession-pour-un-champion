@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Theme: {{theme.nom}}{% endblock %}
+
+{% block body %}
+    <h1 class="center page-title">Theme: {{theme.nom}}</h1>
+    <div class="center">
+        <table class="table table-bordered">
+            <thead class="sticky-header">
+                <tr>
+                    <th class="center">Nom</th>
+                    <th class="center">Icon</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">{{ theme.nom }}</td>
+                    <td class="center">{{ theme.icon }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-xs btn-secondary btn-retour" role="button" href="{{ path('app_theme_index') }}">
+            <i class="fa-solid fa-left-long"></i> Retour à la liste
+        </a>
+        <a class="btn btn-xs btn-warning" role="button" href="{{ path('app_theme_edit', {'id': theme.id}) }}">
+            <i class="fa-solid fa-pen-to-square"></i> Modifier
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Theme{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <h1>Ajouter un theme</h1>
+            {{ include('theme/_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

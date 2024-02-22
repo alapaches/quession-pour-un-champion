@@ -4,10 +4,6 @@
 
 {% block body %}
     <h1 class="center page-title">Modifier un jeu</h1>
-
     {{ include('jeux/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-
-    {# <a href="{{ path('app_jeux_index') }}">back to list</a> #}
-
     {{ include('jeux/_delete_form.html.twig') }}
 {% endblock %}

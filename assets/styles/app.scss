@@ -9,6 +9,8 @@ body {
 }
 
 .center {
+    margin-left: 5%;
+    margin-right: 5%;
     text-align: center;
 }
 .entity_form {
@@ -17,4 +19,21 @@ body {
 
 .page-title {
     margin: 10px 0px 10px 0px;
+}
+
+.table-responsive {
+    max-height:450px;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+}
+
+.search-input {
+    width: 33%;
+    margin-top: 10px;
+    margin-right: 33%;
+    margin-bottom: 10px;
+    margin-left: 33%;
 }

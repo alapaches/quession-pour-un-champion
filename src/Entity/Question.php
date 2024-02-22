@@ -24,6 +24,9 @@ class Question
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Jeux $jeu = null;
 
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    private ?Theme $theme = null;
+
     public function __construct()
     {
         $this->propositions = new ArrayCollection();
@@ -84,6 +87,18 @@ class Question
     public function setJeu(?Jeux $jeu): static
     {
         $this->jeu = $jeu;
+
+        return $this;
+    }
+
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }
