@@ -20,3 +20,8 @@ $("#search-proposition").on("keyup", function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
 });
+
+$(".list-proposition").on("click", function(event) {
+    let currentId = $(this).data("id")
+    
+})

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
@@ -26,6 +27,9 @@ class Question
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Theme $theme = null;
+
+    #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
+    private ?int $difficulte = 0;
 
     public function __construct()
     {
@@ -99,6 +103,18 @@ class Question
     public function setTheme(?Theme $theme): static
     {
         $this->theme = $theme;
+
+        return $this;
+    }
+
+    public function getDifficulte(): ?int
+    {
+        return $this->difficulte;
+    }
+
+    public function setDifficulte(int $difficulte): static
+    {
+        $this->difficulte = $difficulte;
 
         return $this;
     }

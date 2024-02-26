@@ -3,5 +3,38 @@
 {% block title %}{{ jeu.nom }}{% endblock %}
 
 {% block body %}
-
+    <h1 class="center page-title">Jeu en cours : {{ jeu.nom }}</h1>
+    <div class="container">
+        <form action="" method="get">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Équipes</strong>
+                        </div>
+                        <ul class="list-group">
+                            {% for equipe in equipes %}
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="radio" name="equipesRadio" value="" id="radio-{{equipe.nom}}">
+                                    <label class="form-check-label" for="radio-{{equipe.nom}}">{{equipe.nom}}</label>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>{{questions|first.intitule}}</strong>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for proposition in questions|first.getPropositions %}
+                                <li class="list-group-item list-proposition" data-id="{{proposition.id}}">{{proposition.titre}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

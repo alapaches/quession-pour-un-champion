@@ -37,3 +37,9 @@ body {
     margin-bottom: 10px;
     margin-left: 33%;
 }
+
+.list-proposition:hover {
+    cursor: pointer;
+    background-color: $primary;
+    color: #fff;
+}

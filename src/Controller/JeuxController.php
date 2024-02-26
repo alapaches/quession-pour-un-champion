@@ -3,17 +3,26 @@
 namespace App\Controller;
 
 use App\Entity\Jeux;
+use App\Entity\Equipe;
 use App\Form\JeuxType;
+use App\Entity\Question;
 use App\Repository\JeuxRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/jeux')]
 class JeuxController extends AbstractController
 {
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     #[Route('/', name: 'app_jeux_index', methods: ['GET'])]
     public function index(JeuxRepository $jeuxRepository): Response
     {
@@ -69,10 +78,15 @@ class JeuxController extends AbstractController
     }
 
     #[Route('/{id}/play', name: 'app_jeux_play', methods: ['GET', 'POST'])]
-    public function play(Request $request, Jeux $jeu, EntityManagerInterface $entityManager): Response
+    public function play(Request $request, Jeux $jeu): Response
     {
+        $equipes = $this->em->getRepository(Equipe::class)->findAll();
+        $questions = $this->em->getRepository(Question::class)->findBy(array("jeu" => $jeu));
+        
         return $this->render('jeux/running.html.twig', [
-            'jeux' => $jeu,
+            'jeu' => $jeu,
+            'questions' => $questions,
+            'equipes' => $equipes,
         ]);
     }
 
