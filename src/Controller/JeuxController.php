@@ -90,6 +90,15 @@ class JeuxController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/check', name: 'app_jeux_check', methods: ['GET', 'POST'])]
+    public function check(Request $request): Response
+    {
+        dump($request);
+        die();
+
+        return $this->redirectToRoute('app_jeux_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]
     public function delete(Request $request, Jeux $jeux, EntityManagerInterface $entityManager): Response
     {

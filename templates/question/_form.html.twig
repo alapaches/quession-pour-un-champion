@@ -1,5 +1,8 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    <a class="btn btn-xs btn-secondary" href="{{ path('app_question_index') }}">
+        <i class="fa-solid fa-left-long"></i> Retour
+    </a>
     <button class="btn btn-xs btn-success">
         <i class="fa-solid fa-check"></i> {{ button_label|default('Enregistrer') }}
     </button>

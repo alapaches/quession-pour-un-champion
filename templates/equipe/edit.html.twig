@@ -3,11 +3,10 @@
 {% block title %}Modifier équipe{% endblock %}
 
 {% block body %}
-    <h1>Modifier équipe</h1>
+    <h1 class="center page-title">Modifier équipe</h1>
     <div class="container">
         <div class="row">
-            {{ include('equipe/_form.html.twig', {'button_label': 'Update'}) }}
-            {{ include('equipe/_delete_form.html.twig') }}
+            {{ include('equipe/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
         </div>
     </div>
 {% endblock %}

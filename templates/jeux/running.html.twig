@@ -5,7 +5,8 @@
 {% block body %}
     <h1 class="center page-title">Jeu en cours : {{ jeu.nom }}</h1>
     <div class="container">
-        <form action="" method="get">
+        <form action="{{path('app_jeux_check', {'id': jeu.id}) }}" method="post">
+            <input type="hidden" name="question" value="{{questions|first.id}}">
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -15,7 +16,7 @@
                         <ul class="list-group">
                             {% for equipe in equipes %}
                                 <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="radio" name="equipesRadio" value="" id="radio-{{equipe.nom}}">
+                                    <input class="form-check-input me-1" type="radio" name="equipesRadio" value="{{equipe.id}}" id="radio-{{equipe.nom}}">
                                     <label class="form-check-label" for="radio-{{equipe.nom}}">{{equipe.nom}}</label>
                                 </li>
                             {% endfor %}
@@ -29,11 +30,18 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for proposition in questions|first.getPropositions %}
-                                <li class="list-group-item list-proposition" data-id="{{proposition.id}}">{{proposition.titre}}</li>
+                                <li class="list-group-item list-proposition" data-id="{{proposition.id}}">
+                                    {{proposition.titre}}
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div class="center">
+                <button type="submit" class="btn btn-xs btn-success">
+                    <i class="fa-solid fa-check"></i> Valider la réponse
+                </button>
             </div>
         </form>
     </div>

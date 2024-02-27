@@ -28,8 +28,8 @@ class Question
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Theme $theme = null;
 
-    #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
-    private ?int $difficulte = 0;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $difficulte = null;
 
     public function __construct()
     {
@@ -107,12 +107,12 @@ class Question
         return $this;
     }
 
-    public function getDifficulte(): ?int
+    public function getDifficulte(): ?string
     {
         return $this->difficulte;
     }
 
-    public function setDifficulte(int $difficulte): static
+    public function setDifficulte(string $difficulte): static
     {
         $this->difficulte = $difficulte;
 
