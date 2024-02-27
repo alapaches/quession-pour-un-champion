@@ -7,8 +7,14 @@
  */
 import './styles/app.scss'
 import '../node_modules/bootstrap/dist/js/bootstrap'
+import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
+const routes = require('./js/fos_js_routes.json');
+
+Routing.setRoutingData(routes);
+
+
 
 // console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉')
 
@@ -19,6 +25,15 @@ $(function() {
     $(questionDifficulte).parent(".mb-3").addClass("hidden")
     $(questionTheme).val(null)
     $(questionDifficulte).val(null)
+})
+
+$("#jeu-form").on("submit", function(e) {
+    e.preventDefault();
+    const checkRoute = Routing.generate('my_route_to_expose', {id: 1});
+    console.log(test)
+    // $.ajax({
+    //     url: 
+    // })
 })
 
 $(".list-proposition").on("click", function(event) {

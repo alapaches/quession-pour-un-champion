@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Jeux;
 use App\Entity\Equipe;
+use App\Entity\Proposition;
 use App\Form\JeuxType;
 use App\Entity\Question;
 use App\Repository\JeuxRepository;
@@ -92,11 +93,20 @@ class JeuxController extends AbstractController
 
     #[Route('/{id}/check', name: 'app_jeux_check', methods: ['GET', 'POST'])]
     public function check(Request $request): Response
-    {
-        dump($request);
-        die();
+    {   
+        $equipeParam = intval($request->request->get("equipesRadio"));
+        $idJeu = intval($request->get("id"));
+        $propositionParam = intval($request->request->get("list-proposition"));
+        $proposition = $this->em->getRepository(Proposition::class)->findOneBy(array('id' => $propositionParam));
+        $jeu = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
 
-        return $this->redirectToRoute('app_jeux_index', [], Response::HTTP_SEE_OTHER);
+        $reponse = $proposition->isValide();
+
+        return $this->json([
+            'equipe' => $equipeParam,
+            'reponse' => $reponse,
+            'jeu' => $jeu,
+        ]);
     }
 
     #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]

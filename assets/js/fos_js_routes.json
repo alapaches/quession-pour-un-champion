@@ -1,0 +1,22 @@
+{
+  "base_url": "",
+  "routes": {
+    "my_route_to_expose": {
+      "tokens": [
+        ["text", "/check"],
+        ["variable", "/", "[^/]++", "id", true],
+        ["text", "/jeux"]
+      ],
+      "defaults": [],
+      "requirements": [],
+      "hosttokens": [],
+      "methods": [],
+      "schemes": []
+    }
+  },
+  "prefix": "",
+  "host": "localhost",
+  "port": "",
+  "scheme": "http",
+  "locale": ""
+}
