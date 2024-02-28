@@ -106,23 +106,19 @@ class JeuxController extends AbstractController
         $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
         $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
         $testScore = $scoreService->hasScore($equipe);
-
+        $newScore = new Score();
         if(!$testScore) {
-            $newScore = new Score();
             $newScore->setTotal(0);
-            $newScore->setJeu($jeuCourant);
             $newScore->addEquipe($equipe);
-            $equipe->addScore($newScore);
-            $this->em->persist($newScore);
-
-            $this->em->flush();
         } else {
-            dump($equipe);
-            $xxx = $equipe->getScores();
-            dump($xxx);
-            // dump($xxx->getJeu());
-            die();
+            $scoreTmp = $equipe->getScores()[0]->getTotal();
+            $updatedScore = $scoreTmp + 1;
+            $equipe->addScore($updatedScore);
+            $this->em->persist($equipe);
         }
+        $newScore->setJeu($jeuCourant);
+        $this->em->persist($newScore);
+        $this->em->flush();
 
         return $this->json([
             'equipe' => $equipeParam,

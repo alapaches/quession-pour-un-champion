@@ -1,1 +1,22 @@
-{"base_url":"","routes":{"check_jeux":{"tokens":[["text","\/check"],["variable","\/","[^\/]++","id",true],["text","\/jeux"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"localhost","port":"","scheme":"http","locale":""}
+{
+  "base_url": "",
+  "routes": {
+    "check_jeux": {
+      "tokens": [
+        ["text", "/check"],
+        ["variable", "/", "[^/]++", "id", true],
+        ["text", "/jeux"]
+      ],
+      "defaults": [],
+      "requirements": [],
+      "hosttokens": [],
+      "methods": [],
+      "schemes": []
+    }
+  },
+  "prefix": "",
+  "host": "localhost",
+  "port": "",
+  "scheme": "http",
+  "locale": ""
+}
