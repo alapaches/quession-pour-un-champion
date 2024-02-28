@@ -9,7 +9,7 @@ fos_js_routing:
 
 
 
-my_route_to_expose:
+check_jeux:
     path: /jeux/{id}/check
     defaults: { _controller: Jeux:check }
     options:

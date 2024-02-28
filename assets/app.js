@@ -28,12 +28,27 @@ $(function() {
 })
 
 $("#jeu-form").on("submit", function(e) {
-    e.preventDefault();
-    const checkRoute = Routing.generate('my_route_to_expose', {id: 1});
-    console.log(test)
-    // $.ajax({
-    //     url: 
-    // })
+    e.preventDefault()
+    let idJeu = $("#jeu-id").val()
+    let equipe = $('[name="equipesRadio"]').val()
+    let proposition = $('input[name="list-proposition"]:checked')
+    let propositionList = $(proposition).parent("li")
+    let propositionValue = $(proposition).val()
+    const checkRoute = Routing.generate('check_jeux', {id: idJeu})
+
+    $.ajax({
+        url: checkRoute,
+        data: {'equipe': equipe, 'proposition': propositionValue},
+        type: 'POST',
+        success: function(response) {
+            $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
+            response.validation === true ? $(propositionList).addClass("success") : $(propositionList).addClass("error")
+            proposition.prop('checked', false)
+        },
+        error: function(error) {
+
+        }
+    })
 })
 
 $(".list-proposition").on("click", function(event) {

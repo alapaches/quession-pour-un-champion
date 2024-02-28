@@ -8,8 +8,9 @@
 	<h1 class="center page-title">Jeu en cours :
 		{{ jeu.nom }}</h1>
 	<div class="container">
-		<form id="jeu-form" method="post">
-			<input type="hidden" name="question" value="{{questions|first.id}}">
+		<form id="jeu-form">
+			<input type="hidden" id="jeu-id" value="{{jeu.id}}">
+			<input type="hidden" id="question-id" value="{{questions|first.id}}">
 			<div class="row">
 				<div class="col">
 					<div class="card">
@@ -21,6 +22,7 @@
 								<li class="list-group-item">
 									<input class="form-check-input me-1" type="radio" name="equipesRadio" value="{{equipe.id}}" id="radio-{{equipe.nom}}">
 									<label class="form-check-label" for="radio-{{equipe.nom}}">{{equipe.nom}}</label>
+									<span class="badge text-bg-success rounded-pill right">14</span>
 								</li>
 							{% endfor %}
 						</ul>
@@ -33,7 +35,7 @@
 						</div>
 						<ul class="list-group">
 							{% for proposition in questions|first.getPropositions %}
-                                <li class="list-group-item">
+                                <li class="list-group-item li-prop">
                                     <input class="form-check-input me-1" type="radio" name="list-proposition" value="{{proposition.id}}" id="{{proposition.id}}">
                                     <label class="form-check-label" for="{{proposition.id}}">{{proposition.titre}}</label>
                                 </li>

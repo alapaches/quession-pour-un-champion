@@ -52,3 +52,21 @@ body {
 .hidden {
     display: none;
 }
+
+.success {
+    background-color: $success;
+    color: #fff;
+}
+
+.error {
+    background-color: $danger;
+    color: #fff;
+}
+
+.li-prop {
+    transition: 0.3s linear;
+}
+
+.right {
+    float: right;
+}

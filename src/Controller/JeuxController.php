@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Jeux;
 use App\Entity\Equipe;
-use App\Entity\Proposition;
 use App\Form\JeuxType;
 use App\Entity\Question;
-use App\Repository\JeuxRepository;
+use App\Entity\Proposition;
+use App\Entity\Score;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\JeuxRepository;
+use App\Service\ScoreService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -84,6 +86,7 @@ class JeuxController extends AbstractController
         $equipes = $this->em->getRepository(Equipe::class)->findAll();
         $questions = $this->em->getRepository(Question::class)->findBy(array("jeu" => $jeu));
         
+        
         return $this->render('jeux/running.html.twig', [
             'jeu' => $jeu,
             'questions' => $questions,
@@ -94,18 +97,37 @@ class JeuxController extends AbstractController
     #[Route('/{id}/check', name: 'app_jeux_check', methods: ['GET', 'POST'])]
     public function check(Request $request): Response
     {   
-        $equipeParam = intval($request->request->get("equipesRadio"));
+        $equipeParam = intval($request->request->get("equipe"));
+        $scoreService = new ScoreService($this->em);
         $idJeu = intval($request->get("id"));
-        $propositionParam = intval($request->request->get("list-proposition"));
+        $propositionParam = intval($request->request->get("proposition"));
         $proposition = $this->em->getRepository(Proposition::class)->findOneBy(array('id' => $propositionParam));
-        $jeu = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
-
         $reponse = $proposition->isValide();
+        $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
+        $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
+        $testScore = $scoreService->hasScore($equipe);
+
+        if(!$testScore) {
+            $newScore = new Score();
+            $newScore->setTotal(0);
+            $newScore->setJeu($jeuCourant);
+            $newScore->addEquipe($equipe);
+            $equipe->addScore($newScore);
+            $this->em->persist($newScore);
+
+            $this->em->flush();
+        } else {
+            dump($equipe);
+            $xxx = $equipe->getScores();
+            dump($xxx);
+            // dump($xxx->getJeu());
+            die();
+        }
 
         return $this->json([
             'equipe' => $equipeParam,
-            'reponse' => $reponse,
-            'jeu' => $jeu,
+            'validation' => $reponse,
+            'jeu' => $idJeu,
         ]);
     }
 
