@@ -21,13 +21,13 @@ class Equipe
     #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Participant::class, orphanRemoval: true)]
     private Collection $participants;
 
-    #[ORM\ManyToMany(targetEntity: Score::class, mappedBy: 'equipe')]
-    private Collection $scores;
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: ScoreEquipe::class, orphanRemoval: true)]
+    private Collection $scoreEquipes;
 
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->scores = new ArrayCollection();
+        $this->scoreEquipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,27 +78,30 @@ class Equipe
     }
 
     /**
-     * @return Collection<int, Score>
+     * @return Collection<int, ScoreEquipe>
      */
-    public function getScores(): Collection
+    public function getScoreEquipes(): Collection
     {
-        return $this->scores;
+        return $this->scoreEquipes;
     }
 
-    public function addScore(Score $score): static
+    public function addScoreEquipe(ScoreEquipe $scoreEquipe): static
     {
-        if (!$this->scores->contains($score)) {
-            $this->scores->add($score);
-            $score->addEquipe($this);
+        if (!$this->scoreEquipes->contains($scoreEquipe)) {
+            $this->scoreEquipes->add($scoreEquipe);
+            $scoreEquipe->setEquipe($this);
         }
 
         return $this;
     }
 
-    public function removeScore(Score $score): static
+    public function removeScoreEquipe(ScoreEquipe $scoreEquipe): static
     {
-        if ($this->scores->removeElement($score)) {
-            $score->removeEquipe($this);
+        if ($this->scoreEquipes->removeElement($scoreEquipe)) {
+            // set the owning side to null (unless already changed)
+            if ($scoreEquipe->getEquipe() === $this) {
+                $scoreEquipe->setEquipe(null);
+            }
         }
 
         return $this;

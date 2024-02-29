@@ -18,15 +18,16 @@ class Jeux
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
-    #[ORM\OneToOne(mappedBy: 'jeu', cascade: ['persist', 'remove'])]
-    private ?Score $score = null;
-
     #[ORM\OneToMany(mappedBy: 'jeu', targetEntity: Question::class)]
     private Collection $questions;
+
+    #[ORM\OneToMany(mappedBy: 'jeu', targetEntity: ScoreEquipe::class, orphanRemoval: true)]
+    private Collection $scoreEquipes;
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->scoreEquipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -42,28 +43,6 @@ class Jeux
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getScore(): ?Score
-    {
-        return $this->score;
-    }
-
-    public function setScore(?Score $score): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($score === null && $this->score !== null) {
-            $this->score->setJeu(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($score !== null && $score->getJeu() !== $this) {
-            $score->setJeu($this);
-        }
-
-        $this->score = $score;
 
         return $this;
     }
@@ -92,6 +71,36 @@ class Jeux
             // set the owning side to null (unless already changed)
             if ($question->getJeu() === $this) {
                 $question->setJeu(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ScoreEquipe>
+     */
+    public function getScoreEquipes(): Collection
+    {
+        return $this->scoreEquipes;
+    }
+
+    public function addScoreEquipe(ScoreEquipe $scoreEquipe): static
+    {
+        if (!$this->scoreEquipes->contains($scoreEquipe)) {
+            $this->scoreEquipes->add($scoreEquipe);
+            $scoreEquipe->setJeu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScoreEquipe(ScoreEquipe $scoreEquipe): static
+    {
+        if ($this->scoreEquipes->removeElement($scoreEquipe)) {
+            // set the owning side to null (unless already changed)
+            if ($scoreEquipe->getJeu() === $this) {
+                $scoreEquipe->setJeu(null);
             }
         }
 

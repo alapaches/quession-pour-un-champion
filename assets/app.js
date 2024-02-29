@@ -27,10 +27,16 @@ $(function() {
     $(questionDifficulte).val(null)
 })
 
+$('[name="list-proposition"]').on("change", function(e) {
+    resetList()
+    let propositionList = $(this).parent("li")
+    $(propositionList).addClass("prop-selected")
+})
+
 $("#jeu-form").on("submit", function(e) {
     e.preventDefault()
     let idJeu = $("#jeu-id").val()
-    let equipe = $('[name="equipesRadio"]').val()
+    let equipe = $('input[name="equipesRadio"]:checked').val()
     let proposition = $('input[name="list-proposition"]:checked')
     let propositionList = $(proposition).parent("li")
     let propositionValue = $(proposition).val()
@@ -44,6 +50,7 @@ $("#jeu-form").on("submit", function(e) {
             $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
             response.validation === true ? $(propositionList).addClass("success") : $(propositionList).addClass("error")
             proposition.prop('checked', false)
+            $("#score-equipe-"+equipe).text(response.scoreEquipe)
         },
         error: function(error) {
 
@@ -99,3 +106,10 @@ $(".list-proposition").on("click", function(event) {
     let currentId = $(this).data("id")
     
 })
+
+function resetList() {
+    let list = $(".li-prop")
+    $(list).each(function(idx, el) {
+        $(el).hasClass("prop-selected") ? $(el).removeClass("prop-selected") : ""
+    })
+}

@@ -22,7 +22,7 @@
 								<li class="list-group-item">
 									<input class="form-check-input me-1" type="radio" name="equipesRadio" value="{{equipe.id}}" id="radio-{{equipe.nom}}">
 									<label class="form-check-label" for="radio-{{equipe.nom}}">{{equipe.nom}}</label>
-									<span class="badge text-bg-success rounded-pill right">14</span>
+									<span id="score-equipe-{{equipe.id}}" class="badge text-bg-success rounded-pill right">0</span>
 								</li>
 							{% endfor %}
 						</ul>
@@ -42,6 +42,11 @@
 							{% endfor %}
 						</ul>
 					</div>
+				</div>
+				<div class="col">
+					<button class="btn-circle btn-xl primary btn-next">
+						<i class="fa-solid fa-arrow-right icon"></i>
+					</button>
 				</div>
 			</div>
 			<div class="center">
