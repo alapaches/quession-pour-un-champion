@@ -27,7 +27,7 @@ class QuestionType extends AbstractType
             ])
             ->add('difficulte', ChoiceType::class, [
                 'choices' => [
-                    'Choisir une difficulté' => 0,
+                    'Choisir une difficulté' => null,
                     'Facile' => 1,
                     'Difficile' => 2,
                 ]

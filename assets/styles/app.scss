@@ -13,6 +13,7 @@ body {
     margin-right: 5%;
     text-align: center;
 }
+
 .entity_form {
     display: inline;
 }
@@ -22,7 +23,7 @@ body {
 }
 
 .table-responsive {
-    max-height:450px;
+    max-height: 450px;
 }
 
 .sticky-header {
@@ -67,6 +68,20 @@ body {
     transition: 0.3s linear;
 }
 
+.question {
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .right {
     float: right;
 }
@@ -79,6 +94,7 @@ body {
     font-size: 15px;
     text-align: center;
     border-color: unset;
+
     .icon {
         width: 75%;
         height: 75%;
@@ -88,6 +104,14 @@ body {
 .btn-next {
     background-color: $primary;
     color: #fff;
-    position: relative;
-    top: 50%;
+}
+
+.flex-center-div {
+    display: flex;
+    align-items: center;
+}
+
+.submit-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

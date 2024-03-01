@@ -18,7 +18,7 @@ Routing.setRoutingData(routes);
 
 // console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉')
 
-$(function() {
+$(function () {
     let questionTheme = $("#question_theme")
     let questionDifficulte = $("#question_difficulte")
     $(questionTheme).parent(".mb-3").addClass("hidden")
@@ -27,40 +27,53 @@ $(function() {
     $(questionDifficulte).val(null)
 })
 
-$('[name="list-proposition"]').on("change", function(e) {
+$('[name="list-proposition"]').on("change", function (e) {
     resetList()
     let propositionList = $(this).parent("li")
     $(propositionList).addClass("prop-selected")
 })
 
-$("#jeu-form").on("submit", function(e) {
+$("#jeu-form").on("submit", function (e) {
     e.preventDefault()
     let idJeu = $("#jeu-id").val()
     let equipe = $('input[name="equipesRadio"]:checked').val()
     let proposition = $('input[name="list-proposition"]:checked')
     let propositionList = $(proposition).parent("li")
     let propositionValue = $(proposition).val()
-    const checkRoute = Routing.generate('check_jeux', {id: idJeu})
+    const checkRoute = Routing.generate('check_jeux', { id: idJeu })
+    console.log(equipe)
+    console.log(propositionValue)
+    if (!equipe || !propositionValue) {
+        $("#toast-error").fadeIn()
+        setTimeout(function() {
+            $("#toast-error").fadeOut()
+        }, 1500)
+    } else {
+        $.ajax({
+            url: checkRoute,
+            data: { 'equipe': equipe, 'proposition': propositionValue },
+            type: 'POST',
+            success: function (response) {
+                $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
+                if(response.validation === true) {
+                    $(propositionList).addClass("success")
+                } else {
+                    $(propositionList).addClass("error")
+                    $("#next-question").removeClass("hidden")
+                }
+                proposition.prop('checked', false)
+                $("#score-equipe-" + equipe).text(response.scoreEquipe)
+            },
+            error: function (error) {
 
-    $.ajax({
-        url: checkRoute,
-        data: {'equipe': equipe, 'proposition': propositionValue},
-        type: 'POST',
-        success: function(response) {
-            $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
-            response.validation === true ? $(propositionList).addClass("success") : $(propositionList).addClass("error")
-            proposition.prop('checked', false)
-            $("#score-equipe-"+equipe).text(response.scoreEquipe)
-        },
-        error: function(error) {
-
-        }
-    })
+            }
+        })
+    }
 })
 
-$(".list-proposition").on("click", function(event) {
+$(".list-proposition").on("click", function (event) {
     $(this).hasClass("prop-selected") ? $(this).removeClass("prop-selected") : $(this).addClass("prop-selected")
-    
+
 })
 
 $("#search-question").on("keyup", function () {
@@ -77,39 +90,61 @@ $("#search-proposition").on("keyup", function () {
     });
 });
 
-$("#question_jeu").on("change", function(event) {
-    
+$("#question_theme").on("change", function() {
+    let theme = $("option:selected", this).text()
+    let questionDifficulte = $("#question_difficulte")
+    if(theme === "Mystère") {
+        $(questionDifficulte).parent(".mb-3").addClass("hidden")
+        $(questionDifficulte).val(3)
+    } else {
+        $(questionDifficulte).parent(".mb-3").removeClass("hidden")
+        $(questionDifficulte).val(0)
+    }
+})
+
+$("#question_jeu").on("change", function (event) {
+
     let jeuSelected = $("option:selected", this).text()
     let questionTheme = $("#question_theme")
     let questionDifficulte = $("#question_difficulte")
-    switch(jeuSelected) {
+    switch (jeuSelected) {
         case 'Les 12 coups de midi':
         case 'Blind Test':
             $(questionTheme).parent(".mb-3").addClass("hidden")
             $(questionTheme).val(null)
             $(questionDifficulte).parent(".mb-3").addClass("hidden")
             $(questionDifficulte).val(null)
-        break;
+            break;
         default:
-            if($(questionTheme).parent(".mb-3").hasClass("hidden")) {
+            if ($(questionTheme).parent(".mb-3").hasClass("hidden")) {
                 $(questionTheme).parent(".mb-3").removeClass("hidden")
                 $(questionTheme).val("1")
             }
-            if($(questionDifficulte).parent(".mb-3").hasClass("hidden")) {
+            if ($(questionDifficulte).parent(".mb-3").hasClass("hidden")) {
                 $(questionDifficulte).parent(".mb-3").removeClass("hidden")
                 $(questionDifficulte).val("1")
             }
     }
 })
 
-$(".list-proposition").on("click", function(event) {
+$(".list-proposition").on("click", function (event) {
     let currentId = $(this).data("id")
-    
+
+})
+
+$("#next-question").on("click", function () {
+    let currentQuestion = $(".current-question")
+    let nextQuestion = $(currentQuestion).next(".question")
+    $(currentQuestion).removeClass("current-question")
+    $(currentQuestion).addClass("hidden")
+    $(nextQuestion).removeClass("hidden")
+    $(nextQuestion).addClass("current-question")
+
 })
 
 function resetList() {
     let list = $(".li-prop")
-    $(list).each(function(idx, el) {
+    $(list).each(function (idx, el) {
         $(el).hasClass("prop-selected") ? $(el).removeClass("prop-selected") : ""
     })
 }

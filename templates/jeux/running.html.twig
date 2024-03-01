@@ -12,7 +12,7 @@
 			<input type="hidden" id="jeu-id" value="{{jeu.id}}">
 			<input type="hidden" id="question-id" value="{{questions|first.id}}">
 			<div class="row">
-				<div class="col">
+				<div class="col-2">
 					<div class="card">
 						<div class="card-header">
 							<strong>Équipes</strong>
@@ -28,33 +28,56 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col">
-					<div class="card">
-						<div class="card-header">
-							<strong>{{questions|first.intitule}}</strong>
-						</div>
-						<ul class="list-group">
-							{% for proposition in questions|first.getPropositions %}
-                                <li class="list-group-item li-prop">
-                                    <input class="form-check-input me-1" type="radio" name="list-proposition" value="{{proposition.id}}" id="{{proposition.id}}">
-                                    <label class="form-check-label" for="{{proposition.id}}">{{proposition.titre}}</label>
-                                </li>
+				<div class="col-8">
+					{% if (jeu.id == 1) %}
+						<div class="card">
+							{% for question in questions %}
+								<div data-id="{{question.id}}" class="question {% if loop.index != 1 %}hidden{% else %}current-question{% endif %}">
+									<div class="card-header">
+										<strong>Question
+											{{loop.index}}/{{loop.length}}:
+											{{question.intitule}}</strong>
+									</div>
+									<ul class="list-group">
+										{% for proposition in question.getPropositions %}
+											<li class="list-group-item li-prop">
+												<input class="form-check-input me-1" type="radio" name="list-proposition" value="{{proposition.id}}" id="{{proposition.id}}">
+												<label class="form-check-label" for="{{proposition.id}}">{{proposition.titre}}</label>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
 							{% endfor %}
-						</ul>
-					</div>
+						</div>
+					{% elseif (jeu.id == 2) %}
+						<div class="card">
+							
+						</div>
+					{% elseif (jeu.id == 3) %}
+						
+					{% endif %}
 				</div>
-				<div class="col">
-					<button class="btn-circle btn-xl primary btn-next">
+				<div class="col-2 flex-center-div">
+					<button type="button" id="next-question" class="btn-circle btn-xl primary btn-next hidden">
 						<i class="fa-solid fa-arrow-right icon"></i>
 					</button>
 				</div>
 			</div>
-			<div class="center">
+			<div class="center submit-div">
 				<button type="submit" class="btn btn-xs btn-success">
 					<i class="fa-solid fa-check"></i>
 					Valider la réponse
 				</button>
 			</div>
 		</form>
+		<div class="toast-container position-fixed top-0 start-50 translate-middle-x">
+			<div id="toast-error" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">
+						L'équipe ou la réponse est vide
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 {% endblock %}
