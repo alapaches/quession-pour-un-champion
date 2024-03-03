@@ -58,7 +58,7 @@
 										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
-								{% elseif (loopIcons in [4, 8, 12, 16]) %}
+									{% elseif (loopIcons in [4, 8, 12, 16]) %}
 										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
@@ -104,11 +104,28 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div id="modal-animateurs-body" class="modal-body">
-						
+						<div class="container-fluid">
+							<ul class="list-group" id="list-difficulte">
+								<li class="list-group-item li-difficulte">
+									<input class="form-check-input me-1" type="radio" name="select-difficulte" value="difficulte-1" id="difficulte-1">
+									<label class="form-check-label" for="difficulte-1">Facile</label>
+								</li>
+								<li class="list-group-item li-difficulte">
+									<input class="form-check-input me-1" type="radio" name="select-difficulte" value="difficulte-2" id="difficulte-2">
+									<label class="form-check-label" for="difficulte-2">Difficile</label>
+								</li>
+							</ul>
+							<h5 id="question-difficulte" class="card-title"></h5>
+							<div class="center">
+								<button id="reponse-question" class="btn btn-primary hidden">
+									<i class="fa-solid fa-eye"></i>
+									Voir la réponse
+								</button>
+							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-						{# <button type="button" class="btn btn-primary">Understood</button> #}
 					</div>
 				</div>
 			</div>

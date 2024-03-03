@@ -63,12 +63,16 @@ body {
   color: #fff;
 }
 
-.li-prop {
+.li-prop, .li-difficulte {
   transition: 0.3s linear;
 }
 
-.question {
+.question, .difficulte  {
   animation: fadeIn 1s;
+}
+
+#list-difficulte {
+  animation: fadeOut 1s;
 }
 
 @keyframes fadeIn {
@@ -132,4 +136,8 @@ body {
 
 .div-icons:hover {
   cursor: pointer;
+}
+
+#question-difficulte:not(.show), #reponse-question:not(.show) {
+  display: none;
 }

@@ -143,14 +143,34 @@ $(".div-icons").on("click", function() {
         data: {'idTheme': idTheme},
         type: 'GET',
         success: function(response) {
+            let lengthTabDifficulte = response.difficulte.length
+            let tabDifficulte = response.difficulte
+            let tabQuestion = response.questions
+            if(lengthTabDifficulte > 1) {
+                $(tabQuestion).each(function(idx, obj) {
+                    
+                })
+            } else {
 
+            }
+            $(tabDifficulte).each(function(idx, val) {
+
+            })
         },
         error: function(error) {
 
         }
     })
-    // $("#modal-animateurs-title").text("Choissez votre difficulté")
-    // $("#modal-animateurs").modal("show")
+    $("#modal-animateurs-title").text("Choissez votre difficulté")
+    $("#modal-animateurs").modal("show")
+})
+
+$('input[name="select-difficulte"]').on("click", function() {
+    setTimeout(function() {
+        $("#list-difficulte").fadeOut()
+        $("#question-difficulte").fadeIn()
+        $("#reponse-question").fadeIn()
+    }, 200)
 })
 
 function resetList() {

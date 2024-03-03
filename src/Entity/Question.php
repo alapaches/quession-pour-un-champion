@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -14,20 +15,26 @@ class Question
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("jeu")]
     private ?int $id = null;
 
+    #[Groups("jeu")]
     #[ORM\Column(length: 255)]
     private ?string $intitule = null;
 
+    #[Groups("jeu")]
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Proposition::class)]
     private Collection $propositions;
 
+    #[Groups("jeu")]
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Jeux $jeu = null;
 
+    #[Groups("jeu")]
     #[ORM\ManyToOne(inversedBy: 'questions')]
     private ?Theme $theme = null;
 
+    #[Groups("jeu")]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $difficulte = null;
 

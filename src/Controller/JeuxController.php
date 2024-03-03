@@ -103,15 +103,25 @@ class JeuxController extends AbstractController
     {
         $idJeu = intval($request->get("id"));
         $idTheme = intval($request->get("idTheme"));
-        if($idTheme) {
-            switch($idTheme) {
+        $tabDifficulte = [];
+        if ($idTheme) {
+            switch ($idTheme) {
                 case 11:
-                    $question = $this->em->getRepository(Question::class)->findOneBy(["theme" => $idTheme]);
-                    dd($question);
-                break;
+                    $tabQuestions = $this->em->getRepository(Question::class)->findOneBy(["theme" => $idTheme]);
+                    $difficulte = $tabQuestions->getDifficulte() === "1" ? "Facile" : "Difficile";
+                    array_push($tabDifficulte, $difficulte);
+                    break;
                 default:
-                    //TODO
+                    $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme]);
+                    foreach ($tabQuestions as $question) {
+                        $difficulte = $question->getDifficulte() === "1" ? "Facile" : "Difficile";
+                        array_push($tabDifficulte, $difficulte);
+                    }
             }
+            return $this->json([
+                "questions" => $tabQuestions,
+                "difficulte" => $tabDifficulte
+            ], 200, [], ['groups' => 'jeu']);
         } else {
             $equipeParam = intval($request->request->get("equipe"));
             $propositionParam = intval($request->request->get("proposition"));
@@ -133,9 +143,9 @@ class JeuxController extends AbstractController
             $scoreTmp = $scoreEquipe->getScore();
             $updatedScore = $reponse === true ? $scoreTmp + 1 : $scoreTmp;
             $scoreEquipe->setScore($updatedScore);
-    
+
             $this->em->flush();
-    
+
             return $this->json([
                 'equipe' => $equipeParam,
                 'validation' => $reponse,
