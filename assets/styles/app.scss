@@ -3,115 +3,133 @@ $primary: darken(#428bca, 20%);
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
 
-
 body {
-    background-color: skyblue;
+  background-color: skyblue;
 }
 
 .center {
-    margin-left: 5%;
-    margin-right: 5%;
-    text-align: center;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
 }
 
 .entity_form {
-    display: inline;
+  display: inline;
 }
 
 .page-title {
-    margin: 10px 0px 10px 0px;
+  margin: 10px 0px 10px 0px;
 }
 
 .table-responsive {
-    max-height: 450px;
+  max-height: 450px;
 }
 
 .sticky-header {
-    position: sticky;
-    top: 0;
+  position: sticky;
+  top: 0;
 }
 
 .search-input {
-    width: 33%;
-    margin-top: 10px;
-    margin-right: 33%;
-    margin-bottom: 10px;
-    margin-left: 33%;
+  width: 33%;
+  margin-top: 10px;
+  margin-right: 33%;
+  margin-bottom: 10px;
+  margin-left: 33%;
 }
 
 .list-proposition:hover {
-    cursor: pointer;
-    background-color: $primary;
-    color: #fff;
+  cursor: pointer;
+  background-color: $primary;
+  color: #fff;
 }
 
 .prop-selected {
-    background-color: $primary;
-    color: #fff;
+  background-color: $primary;
+  color: #fff;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .success {
-    background-color: $success;
-    color: #fff;
+  background-color: $success;
+  color: #fff;
 }
 
 .error {
-    background-color: $danger;
-    color: #fff;
+  background-color: $danger;
+  color: #fff;
 }
 
 .li-prop {
-    transition: 0.3s linear;
+  transition: 0.3s linear;
 }
 
 .question {
-    animation: fadeIn 1s;
+  animation: fadeIn 1s;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }
 
 .right {
-    float: right;
+  float: right;
 }
 
 .btn-circle.btn-xl {
-    width: 100px;
-    height: 100px;
-    padding: 13px 18px;
-    border-radius: 60px;
-    font-size: 15px;
-    text-align: center;
-    border-color: unset;
+  width: 100px;
+  height: 100px;
+  padding: 13px 18px;
+  border-radius: 60px;
+  font-size: 15px;
+  text-align: center;
+  border-color: unset;
 
-    .icon {
-        width: 75%;
-        height: 75%;
-    }
+  .icon {
+    width: 75%;
+    height: 75%;
+  }
 }
 
 .btn-next {
-    background-color: $primary;
-    color: #fff;
+  background-color: $primary;
+  color: #fff;
 }
 
 .flex-center-div {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .submit-div {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.icon-game {
+    width: 50%;
+    height: 50%;
+    margin: 0 25% 0 25%;
+}
+
+.row-grid {
+    margin: auto;
+}
+
+.div-icons {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+    border: 2px solid black;
+}
+
+.div-icons:hover {
+  cursor: pointer;
 }

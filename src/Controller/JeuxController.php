@@ -9,6 +9,7 @@ use App\Entity\Question;
 use App\Entity\Proposition;
 use App\Entity\Score;
 use App\Entity\ScoreEquipe;
+use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\JeuxRepository;
 use App\Service\ScoreService;
@@ -85,55 +86,69 @@ class JeuxController extends AbstractController
     public function play(Request $request, Jeux $jeu): Response
     {
         $equipes = $this->em->getRepository(Equipe::class)->findAll();
+        $themes = $this->em->getRepository(Theme::class)->findAll();
         $questions = $this->em->getRepository(Question::class)->findBy(array("jeu" => $jeu));
-        
-        
+
+
         return $this->render('jeux/running.html.twig', [
             'jeu' => $jeu,
             'questions' => $questions,
             'equipes' => $equipes,
+            'themes' => $themes,
         ]);
     }
 
     #[Route('/{id}/check', name: 'app_jeux_check', methods: ['GET', 'POST'])]
     public function check(Request $request): Response
-    {   
-        $equipeParam = intval($request->request->get("equipe"));
+    {
         $idJeu = intval($request->get("id"));
-        $propositionParam = intval($request->request->get("proposition"));
-        $proposition = $this->em->getRepository(Proposition::class)->findOneBy(array('id' => $propositionParam));
-        $reponse = $proposition->isValide();
-        $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
-        $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
-        $scoreEquipe = $this->em->getREpository(ScoreEquipe::class)->findOneBy([
-            "jeu" => $jeuCourant,
-            "equipe" => $equipe
-        ]);
-        if(!$scoreEquipe) {
-            $scoreEquipe = new ScoreEquipe();
-            $scoreEquipe->setJeu($jeuCourant);
-            $scoreEquipe->setEquipe($equipe);
-            $scoreEquipe->setScore(0);
-            $this->em->persist($scoreEquipe);
+        $idTheme = intval($request->get("idTheme"));
+        if($idTheme) {
+            switch($idTheme) {
+                case 11:
+                    $question = $this->em->getRepository(Question::class)->findOneBy(["theme" => $idTheme]);
+                    dd($question);
+                break;
+                default:
+                    //TODO
+            }
+        } else {
+            $equipeParam = intval($request->request->get("equipe"));
+            $propositionParam = intval($request->request->get("proposition"));
+            $proposition = $this->em->getRepository(Proposition::class)->findOneBy(array('id' => $propositionParam));
+            $reponse = $proposition->isValide();
+            $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
+            $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
+            $scoreEquipe = $this->em->getRepository(ScoreEquipe::class)->findOneBy([
+                "jeu" => $jeuCourant,
+                "equipe" => $equipe
+            ]);
+            if (!$scoreEquipe) {
+                $scoreEquipe = new ScoreEquipe();
+                $scoreEquipe->setJeu($jeuCourant);
+                $scoreEquipe->setEquipe($equipe);
+                $scoreEquipe->setScore(0);
+                $this->em->persist($scoreEquipe);
+            }
+            $scoreTmp = $scoreEquipe->getScore();
+            $updatedScore = $reponse === true ? $scoreTmp + 1 : $scoreTmp;
+            $scoreEquipe->setScore($updatedScore);
+    
+            $this->em->flush();
+    
+            return $this->json([
+                'equipe' => $equipeParam,
+                'validation' => $reponse,
+                'jeu' => $idJeu,
+                'scoreEquipe' => $scoreEquipe->getScore()
+            ]);
         }
-        $scoreTmp = $scoreEquipe->getScore();
-        $updatedScore = $reponse === true ? $scoreTmp + 1 : $scoreTmp;
-        $scoreEquipe->setScore($updatedScore);
-        
-        $this->em->flush();
-        
-        return $this->json([
-            'equipe' => $equipeParam,
-            'validation' => $reponse,
-            'jeu' => $idJeu,
-            'scoreEquipe' => $scoreEquipe->getScore()
-        ]);
     }
 
     #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]
     public function delete(Request $request, Jeux $jeux, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$jeux->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $jeux->getId(), $request->request->get('_token'))) {
             $entityManager->remove($jeux);
             $entityManager->flush();
         }

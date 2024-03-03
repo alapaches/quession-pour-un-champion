@@ -15,7 +15,6 @@ const routes = require('./js/fos_js_routes.json');
 Routing.setRoutingData(routes);
 
 
-
 // console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉')
 
 $(function () {
@@ -36,13 +35,11 @@ $('[name="list-proposition"]').on("change", function (e) {
 $("#jeu-form").on("submit", function (e) {
     e.preventDefault()
     let idJeu = $("#jeu-id").val()
+    const checkRoute = Routing.generate('check_jeux', { id: idJeu })
     let equipe = $('input[name="equipesRadio"]:checked').val()
     let proposition = $('input[name="list-proposition"]:checked')
     let propositionList = $(proposition).parent("li")
     let propositionValue = $(proposition).val()
-    const checkRoute = Routing.generate('check_jeux', { id: idJeu })
-    console.log(equipe)
-    console.log(propositionValue)
     if (!equipe || !propositionValue) {
         $("#toast-error").fadeIn()
         setTimeout(function() {
@@ -127,11 +124,6 @@ $("#question_jeu").on("change", function (event) {
     }
 })
 
-$(".list-proposition").on("click", function (event) {
-    let currentId = $(this).data("id")
-
-})
-
 $("#next-question").on("click", function () {
     let currentQuestion = $(".current-question")
     let nextQuestion = $(currentQuestion).next(".question")
@@ -140,6 +132,25 @@ $("#next-question").on("click", function () {
     $(nextQuestion).removeClass("hidden")
     $(nextQuestion).addClass("current-question")
 
+})
+
+$(".div-icons").on("click", function() {
+    let idTheme = $(this).attr("id")
+    let idJeu = $("#jeu-id").val()
+    const checkRoute = Routing.generate('check_jeux', { id: idJeu })
+    $.ajax({
+        url: checkRoute,
+        data: {'idTheme': idTheme},
+        type: 'GET',
+        success: function(response) {
+
+        },
+        error: function(error) {
+
+        }
+    })
+    // $("#modal-animateurs-title").text("Choissez votre difficulté")
+    // $("#modal-animateurs").modal("show")
 })
 
 function resetList() {

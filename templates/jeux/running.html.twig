@@ -29,14 +29,16 @@
 					</div>
 				</div>
 				<div class="col-8">
-					{% if (jeu.id == 1) %}
-						<div class="card">
+					<div class="card">
+						{% set loopIcons = 0 %}
+						{% if (jeu.id == 1) %}
 							{% for question in questions %}
 								<div data-id="{{question.id}}" class="question {% if loop.index != 1 %}hidden{% else %}current-question{% endif %}">
 									<div class="card-header">
 										<strong>Question
 											{{loop.index}}/{{loop.length}}:
-											{{question.intitule}}</strong>
+											{{question.intitule}}
+										</strong>
 									</div>
 									<ul class="list-group">
 										{% for proposition in question.getPropositions %}
@@ -48,14 +50,28 @@
 									</ul>
 								</div>
 							{% endfor %}
-						</div>
-					{% elseif (jeu.id == 2) %}
-						<div class="card">
-							
-						</div>
-					{% elseif (jeu.id == 3) %}
-						
-					{% endif %}
+						{% elseif (jeu.id == 2) %}
+							{% for theme in themes|sort((a,b) => random(-1,1)) %}
+								{% set loopIcons = loopIcons + 1 %}
+								{% if (loopIcons in [1, 5, 9, 13]) %}
+									<div class="row row-grid">
+										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+											<i class="{{theme.icon}} icon-game"></i>
+										</div>
+								{% elseif (loopIcons in [4, 8, 12, 16]) %}
+										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+											<i class="{{theme.icon}} icon-game"></i>
+										</div>
+									</div>
+								{% else %}
+									<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+										<i class="{{theme.icon}} icon-game"></i>
+									</div>
+								{% endif %}
+							{% endfor %}
+							{% elseif (jeu.id == 3) %}
+						{% endif %}
+					</div>
 				</div>
 				<div class="col-2 flex-center-div">
 					<button type="button" id="next-question" class="btn-circle btn-xl primary btn-next hidden">
@@ -75,6 +91,24 @@
 				<div class="d-flex">
 					<div class="toast-body">
 						L'équipe ou la réponse est vide
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="modal-animateurs" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="modal-animateurs-title"></h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div id="modal-animateurs-body" class="modal-body">
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						{# <button type="button" class="btn btn-primary">Understood</button> #}
 					</div>
 				</div>
 			</div>
