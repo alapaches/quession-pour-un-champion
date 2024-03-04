@@ -7,10 +7,20 @@ controllers:
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing-sf4.xml"
 
-
-
 check_jeux:
     path: /jeux/{id}/check
     defaults: { _controller: Jeux:check }
+    options:
+        expose: true
+
+check_reponse:
+    path: /jeux/reponse/{id}/get
+    defaults: { _controller: Jeux:getReponse }
+    options:
+        expose: true
+
+check_difficulte:
+    path: /jeux/difficulte/{difficulte}/get
+    defaults: { _controller: Jeux:getQuestionsByDifficulty }
     options:
         expose: true

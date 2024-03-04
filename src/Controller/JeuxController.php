@@ -165,4 +165,30 @@ class JeuxController extends AbstractController
 
         return $this->redirectToRoute('app_jeux_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/reponse/{id}/get', name: 'app_jeux_get_reponse', methods: ['GET'])]
+    public function getReponse(Request $request): Response
+    {
+        $idQuestion = intval($request->get("idQuestion"));
+        $reponse = $this->em->getRepository(Proposition::class)->findOneBy(["question" => $idQuestion])->getTitre();
+        
+        return $this->json([
+            "reponseQuestion" => $reponse
+        ], 200, [], ['groups' => 'jeu']);
+    }
+
+    #[Route('/difficulte/{difficulte}/get', name: 'app_jeux_get_questions_by_difficulty', methods: ['GET'])]
+    public function getQuestionsByDifficulty(Request $request): Response
+    {
+        $difficulte = intval($request->get("difficulte"));
+        $theme = intval($request->query->get("theme"));
+        $question = [];
+        $questionsTab = $this->em->getRepository(Question::class)->findOneBy(["theme" => $theme, "difficulte" => $difficulte]);
+        dd($questionsTab);
+        array_push($question, ["intitule" => $questionsTab->getIntitule(), "propositions" => $questionsTab->getPropositions()]);
+
+        return $this->json([
+            "question" => $question
+        ], 200, [], ['groups' => 'jeu']);
+    }
 }

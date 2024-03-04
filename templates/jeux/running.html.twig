@@ -10,7 +10,6 @@
 	<div class="container">
 		<form id="jeu-form">
 			<input type="hidden" id="jeu-id" value="{{jeu.id}}">
-			<input type="hidden" id="question-id" value="{{questions|first.id}}">
 			<div class="row">
 				<div class="col-2">
 					<div class="card">
@@ -55,16 +54,16 @@
 								{% set loopIcons = loopIcons + 1 %}
 								{% if (loopIcons in [1, 5, 9, 13]) %}
 									<div class="row row-grid">
-										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+										<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
 									{% elseif (loopIcons in [4, 8, 12, 16]) %}
-										<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+										<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
 									</div>
 								{% else %}
-									<div id="{{theme.id}}" class="col-3 flex-center-div div-icons">
+									<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
 										<i class="{{theme.icon}} icon-game"></i>
 									</div>
 								{% endif %}
@@ -80,7 +79,7 @@
 				</div>
 			</div>
 			<div class="center submit-div">
-				<button type="submit" class="btn btn-xs btn-success">
+				<button id="submit-form" type="submit" class="btn btn-xs btn-success">
 					<i class="fa-solid fa-check"></i>
 					Valider la réponse
 				</button>
@@ -89,7 +88,7 @@
 		<div class="toast-container position-fixed top-0 start-50 translate-middle-x">
 			<div id="toast-error" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
 				<div class="d-flex">
-					<div class="toast-body">
+					<div id="toast-body" class="toast-body">
 						L'équipe ou la réponse est vide
 					</div>
 				</div>
@@ -100,32 +99,43 @@
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="modal-animateurs-title"></h1>
+						<h1 class="modal-title fs-5" id="modal-animateurs-title">Sélectionnez la difficulté</h1>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div id="modal-animateurs-body" class="modal-body">
 						<div class="container-fluid">
 							<ul class="list-group" id="list-difficulte">
 								<li class="list-group-item li-difficulte">
-									<input class="form-check-input me-1" type="radio" name="select-difficulte" value="difficulte-1" id="difficulte-1">
+									<input class="form-check-input me-1" type="radio" data-id="1" name="select-difficulte" value="difficulte-1" id="difficulte-1">
 									<label class="form-check-label" for="difficulte-1">Facile</label>
 								</li>
 								<li class="list-group-item li-difficulte">
-									<input class="form-check-input me-1" type="radio" name="select-difficulte" value="difficulte-2" id="difficulte-2">
+									<input class="form-check-input me-1" type="radio" data-id="2" name="select-difficulte" value="difficulte-2" id="difficulte-2">
 									<label class="form-check-label" for="difficulte-2">Difficile</label>
 								</li>
 							</ul>
-							<h5 id="question-difficulte" class="card-title"></h5>
+							<p id="question-difficulte"></p>
+							<p id="theme-id"></p>
+							<p id="level-difficulte"></p>
+							<p id="id-question"></p>
 							<div class="center">
 								<button id="reponse-question" class="btn btn-primary hidden">
 									<i class="fa-solid fa-eye"></i>
 									Voir la réponse
 								</button>
+								<div class="input-group mb-3">
+									<input id="reponse-intitule" type="text" class="form-control" disabled>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						<button id="bonne-rep" type="button" class="btn btn-success hidden" data-bs-dismiss="modal">
+							<i class="fa-solid fa-check"></i> Bonne réponse
+						</button>
+						<button id="mauvaise-rep" type="button" class="btn btn-danger hidden" data-bs-dismiss="modal">
+							<i class="fa-solid fa-xmark"></i> Mauvaise Réponse
+						</button>
 					</div>
 				</div>
 			</div>

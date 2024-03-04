@@ -20,6 +20,10 @@ Routing.setRoutingData(routes);
 $(function () {
     let questionTheme = $("#question_theme")
     let questionDifficulte = $("#question_difficulte")
+    let jeu = $("#jeu-id").val()
+    if(jeu !== "1") {
+        $("#submit-form").addClass("hidden")
+    }
     $(questionTheme).parent(".mb-3").addClass("hidden")
     $(questionDifficulte).parent(".mb-3").addClass("hidden")
     $(questionTheme).val(null)
@@ -42,7 +46,7 @@ $("#jeu-form").on("submit", function (e) {
     let propositionValue = $(proposition).val()
     if (!equipe || !propositionValue) {
         $("#toast-error").fadeIn()
-        setTimeout(function() {
+        setTimeout(function () {
             $("#toast-error").fadeOut()
         }, 1500)
     } else {
@@ -52,7 +56,7 @@ $("#jeu-form").on("submit", function (e) {
             type: 'POST',
             success: function (response) {
                 $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
-                if(response.validation === true) {
+                if (response.validation === true) {
                     $(propositionList).addClass("success")
                 } else {
                     $(propositionList).addClass("error")
@@ -87,10 +91,10 @@ $("#search-proposition").on("keyup", function () {
     });
 });
 
-$("#question_theme").on("change", function() {
+$("#question_theme").on("change", function () {
     let theme = $("option:selected", this).text()
     let questionDifficulte = $("#question_difficulte")
-    if(theme === "Mystère") {
+    if (theme === "Mystère") {
         $(questionDifficulte).parent(".mb-3").addClass("hidden")
         $(questionDifficulte).val(3)
     } else {
@@ -134,43 +138,107 @@ $("#next-question").on("click", function () {
 
 })
 
-$(".div-icons").on("click", function() {
-    let idTheme = $(this).attr("id")
+$(".div-icons").on("click", function () {
+    let idTheme = $(this).data("theme")
     let idJeu = $("#jeu-id").val()
+    let equipe = $('input[name="equipesRadio"]:checked').val()
+    $("#theme-id").text(idTheme)
     const checkRoute = Routing.generate('check_jeux', { id: idJeu })
-    $.ajax({
-        url: checkRoute,
-        data: {'idTheme': idTheme},
-        type: 'GET',
-        success: function(response) {
-            let lengthTabDifficulte = response.difficulte.length
-            let tabDifficulte = response.difficulte
-            let tabQuestion = response.questions
-            if(lengthTabDifficulte > 1) {
-                $(tabQuestion).each(function(idx, obj) {
-                    
-                })
-            } else {
+    if (!equipe) {
+        $("#toast-body").text("Veuillez sélectionner une équipe")
+        $("#toast-error").fadeIn()
+        setTimeout(function () {
+            $("#toast-error").fadeOut()
+        }, 1500)
+    } else {
+        $.ajax({
+            url: checkRoute,
+            data: { 'idTheme': idTheme },
+            type: 'GET',
+            success: function (response) {
+                let lengthTabDifficulte = response.difficulte.length
+                let tabDifficulte = response.difficulte
+                let tabQuestion = response.questions
+                if (lengthTabDifficulte > 1) {
+                    $(tabQuestion).each(function (idx, obj) {
 
+                    })
+                } else {
+                    $("#level-difficulte").text("3")
+                    $("#question-difficulte").text(tabQuestion.intitule)
+                    $("#id-question").text(tabQuestion.id)
+                    setTimeout(function () {
+                        $("#question-difficulte").fadeIn()
+                    }, 0)
+                    $("#modal-animateurs-title").text("Question Mystère")
+                    $("#list-difficulte").addClass("hidden")
+                    $("#reponse-question").fadeIn()
+                }
+            },
+            error: function (error) {
+
+            },
+            complete: function () {
+                setTimeout(function () {
+                    $("#modal-animateurs").modal("show")
+                }, 250)
             }
-            $(tabDifficulte).each(function(idx, val) {
+        })
+    }
+})
 
-            })
+$('input[name="select-difficulte"]').on("click", function () {
+    let selectedDifficulte = $('input[name="select-difficulte"]:checked').data("id")
+    let theme = $("#theme-id").text()
+    setTimeout(function() {
+        $("#level-difficulte").text(selectedDifficulte)
+    }, 0)
+    const urlQuestions = Routing.generate('check_difficulte', { difficulte: selectedDifficulte })
+
+    $.ajax({
+        url: urlQuestions,
+        type: 'GET',
+        data: {'theme': theme},
+        success: function(response) {
+            console.log(response.question)
         },
         error: function(error) {
 
         }
     })
-    $("#modal-animateurs-title").text("Choissez votre difficulté")
-    $("#modal-animateurs").modal("show")
-})
-
-$('input[name="select-difficulte"]').on("click", function() {
-    setTimeout(function() {
+    setTimeout(function () {
         $("#list-difficulte").fadeOut()
         $("#question-difficulte").fadeIn()
         $("#reponse-question").fadeIn()
-    }, 200)
+    }, 250)
+})
+
+$("#reponse-question").on("click", function () {
+    let idQuestion = $("#id-question").text()
+    idQuestion = parseInt(idQuestion, 10)
+    const checkReponse = Routing.generate('check_reponse', { id: idQuestion })
+    $.ajax({
+        type: 'GET',
+        url: checkReponse,
+        data: { 'idQuestion': idQuestion },
+        success: function (data) {
+            $("#reponse-intitule").val(data.reponseQuestion)
+            $("#reponse-question").fadeOut()
+            setTimeout(function () {
+                $("#reponse-intitule").fadeIn()
+                $("#bonne-rep").removeClass("hidden")
+                $("#mauvaise-rep").removeClass("hidden")
+            }, 200)
+        },
+        error: function (error) {
+
+        }
+    })
+})
+
+$("#bonne-rep").on("click", function() {
+    let equipe = $('input[name="equipesRadio"]:checked').val()
+
 })
 
 function resetList() {
