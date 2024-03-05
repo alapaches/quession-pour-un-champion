@@ -108,7 +108,7 @@ class JeuxController extends AbstractController
             switch ($idTheme) {
                 case 11:
                     $tabQuestions = $this->em->getRepository(Question::class)->findOneBy(["theme" => $idTheme]);
-                    $difficulte = $tabQuestions->getDifficulte() === "1" ? "Facile" : "Difficile";
+                    $difficulte = "Mystère";
                     array_push($tabDifficulte, $difficulte);
                     break;
                 default:
@@ -171,7 +171,7 @@ class JeuxController extends AbstractController
     {
         $idQuestion = intval($request->get("idQuestion"));
         $reponse = $this->em->getRepository(Proposition::class)->findOneBy(["question" => $idQuestion])->getTitre();
-        
+
         return $this->json([
             "reponseQuestion" => $reponse
         ], 200, [], ['groups' => 'jeu']);
@@ -182,13 +182,69 @@ class JeuxController extends AbstractController
     {
         $difficulte = intval($request->get("difficulte"));
         $theme = intval($request->query->get("theme"));
+        $titreTheme = $this->em->getRepository(Theme::class)->findOneById($theme)->getNom();
         $question = [];
-        $questionsTab = $this->em->getRepository(Question::class)->findOneBy(["theme" => $theme, "difficulte" => $difficulte]);
-        dd($questionsTab);
-        array_push($question, ["intitule" => $questionsTab->getIntitule(), "propositions" => $questionsTab->getPropositions()]);
+        $questionsEntity = $this->em->getRepository(Question::class)->findOneBy(["theme" => $theme, "difficulte" => $difficulte]);
+        $questionsTab = $questionsEntity->getPropositions()->toArray()[0];
+        $question["intitule"] = $questionsEntity->getIntitule();
+        $question["theme"] = $titreTheme;
+        $question["reponseValide"] = $questionsTab->getTitre();
 
         return $this->json([
             "question" => $question
         ], 200, [], ['groups' => 'jeu']);
+    }
+
+    #[Route('/score/{jeu}/get', name: 'app_jeux_get_score', methods: ['GET'])]
+    public function getScore(Request $request): Response
+    {
+        $idJeu = intval($request->get("jeu"));
+        $tabScoreEquipe = [];
+        $equipes = $this->em->getRepository(Equipe::class)->findAll();
+        foreach ($equipes as $equipe) {
+            $sTab = [];
+            $tmpScore = 0;
+            $scoreEquipe = $this->em->getRepository(ScoreEquipe::class)->findOneBy(["jeu" => $idJeu, "equipe" => $equipe->getId()]);
+            if($scoreEquipe) {
+                $tmpScore = $tmpScore + $scoreEquipe->getScore();
+            }
+            $finalScore = round($tmpScore);
+            $sTab["equipe"] = $equipe->getId();
+            $sTab["score"] = $finalScore;
+
+            array_push($tabScoreEquipe, $sTab);
+        }
+        
+
+        return $this->json(['tableauScores' => $tabScoreEquipe]);
+    }
+
+    #[Route('/score/{jeu}/set', name: 'app_jeux_set_score', methods: ['GET', 'POST'])]
+    public function setScore(Request $request): Response
+    {
+        $idJeu = intval($request->get("jeu"));
+        $equipeParam = intval($request->get("equipe"));
+        $score = intval($request->get("score"));
+
+        $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
+        $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
+        $scoreEquipe = $this->em->getRepository(ScoreEquipe::class)->findOneBy([
+            "jeu" => $jeuCourant,
+            "equipe" => $equipe
+        ]);
+        if (!$scoreEquipe) {
+            $scoreEquipe = new ScoreEquipe();
+            $scoreEquipe->setJeu($jeuCourant);
+            $scoreEquipe->setEquipe($equipe);
+            $scoreEquipe->setScore(0);
+            $this->em->persist($scoreEquipe);
+        }
+        $scoreTmp = $scoreEquipe->getScore();
+        $updatedScore = $scoreTmp + $score;
+        $scoreEquipe->setScore($updatedScore);
+
+        $this->em->flush();
+
+        return $this->json(['score' => $scoreEquipe->getScore(), 'equipe' => $equipeParam], 200, [], ['groups' => 'jeu']);
     }
 }

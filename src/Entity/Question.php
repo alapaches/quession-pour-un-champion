@@ -23,7 +23,7 @@ class Question
     private ?string $intitule = null;
 
     #[Groups("jeu")]
-    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Proposition::class)]
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Proposition::class, fetch: "EAGER")]
     private Collection $propositions;
 
     #[Groups("jeu")]

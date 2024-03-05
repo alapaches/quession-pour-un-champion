@@ -20,9 +20,17 @@ Routing.setRoutingData(routes);
 $(function () {
     let questionTheme = $("#question_theme")
     let questionDifficulte = $("#question_difficulte")
-    let jeu = $("#jeu-id").val()
-    if(jeu !== "1") {
+    let idJeu = $("#jeu-id").val()
+    if (idJeu !== "1") {
         $("#submit-form").addClass("hidden")
+        const routeGetScores = Routing.generate('get_score', { jeu: idJeu })
+        $.ajax({
+            url: routeGetScores,
+            type: 'GET',
+            success: function(response) {
+                console.log(response)
+            }
+        })
     }
     $(questionTheme).parent(".mb-3").addClass("hidden")
     $(questionDifficulte).parent(".mb-3").addClass("hidden")
@@ -74,7 +82,6 @@ $("#jeu-form").on("submit", function (e) {
 
 $(".list-proposition").on("click", function (event) {
     $(this).hasClass("prop-selected") ? $(this).removeClass("prop-selected") : $(this).addClass("prop-selected")
-
 })
 
 $("#search-question").on("keyup", function () {
@@ -104,7 +111,6 @@ $("#question_theme").on("change", function () {
 })
 
 $("#question_jeu").on("change", function (event) {
-
     let jeuSelected = $("option:selected", this).text()
     let questionTheme = $("#question_theme")
     let questionDifficulte = $("#question_difficulte")
@@ -151,6 +157,7 @@ $(".div-icons").on("click", function () {
             $("#toast-error").fadeOut()
         }, 1500)
     } else {
+        // getQuestionsReponses()
         $.ajax({
             url: checkRoute,
             data: { 'idTheme': idTheme },
@@ -159,11 +166,7 @@ $(".div-icons").on("click", function () {
                 let lengthTabDifficulte = response.difficulte.length
                 let tabDifficulte = response.difficulte
                 let tabQuestion = response.questions
-                if (lengthTabDifficulte > 1) {
-                    $(tabQuestion).each(function (idx, obj) {
-
-                    })
-                } else {
+                if (lengthTabDifficulte === 1) {
                     $("#level-difficulte").text("3")
                     $("#question-difficulte").text(tabQuestion.intitule)
                     $("#id-question").text(tabQuestion.id)
@@ -188,62 +191,78 @@ $(".div-icons").on("click", function () {
 })
 
 $('input[name="select-difficulte"]').on("click", function () {
-    let selectedDifficulte = $('input[name="select-difficulte"]:checked').data("id")
-    let theme = $("#theme-id").text()
-    setTimeout(function() {
-        $("#level-difficulte").text(selectedDifficulte)
-    }, 0)
-    const urlQuestions = Routing.generate('check_difficulte', { difficulte: selectedDifficulte })
-
-    $.ajax({
-        url: urlQuestions,
-        type: 'GET',
-        data: {'theme': theme},
-        success: function(response) {
-            console.log(response.question)
-        },
-        error: function(error) {
-
-        }
-    })
-    setTimeout(function () {
-        $("#list-difficulte").fadeOut()
-        $("#question-difficulte").fadeIn()
-        $("#reponse-question").fadeIn()
-    }, 250)
+    getQuestionsReponses()
 })
 
 $("#reponse-question").on("click", function () {
-    let idQuestion = $("#id-question").text()
-    idQuestion = parseInt(idQuestion, 10)
-    const checkReponse = Routing.generate('check_reponse', { id: idQuestion })
+    $(this).fadeOut()
+    getQuestionsReponses(true)
+    setTimeout(function () {
+        $("#reponse-intitule").fadeIn()
+        $("#bonne-rep").removeClass("hidden")
+        $("#mauvaise-rep").removeClass("hidden")
+    }, 200)
+})
+
+$("#bonne-rep").on("click", function () {
+    let equipe = $('input[name="equipesRadio"]:checked').val()
+    let difficulte = $('input[name="select-difficulte"]:checked').data("id") ? $('input[name="select-difficulte"]:checked').data("id") : "3"
+    let jeu = $("#jeu-id").val()
+    equipe = parseInt(equipe, 10)
+    difficulte = parseInt(difficulte, 10)
+    jeu = parseInt(jeu, 10)
+    addScore(equipe, jeu, difficulte)
+})
+
+function getQuestionsReponses(mystere = false) {
+    let selectedDifficulte = $('input[name="select-difficulte"]:checked').data("id") ? $('input[name="select-difficulte"]:checked').data("id") : "3"
+    let theme = $("#theme-id").text()
+    setTimeout(function () {
+        $("#level-difficulte").text(selectedDifficulte)
+    }, 0)
+    const urlQuestions = Routing.generate('check_difficulte', { difficulte: selectedDifficulte })
     $.ajax({
+        url: urlQuestions,
         type: 'GET',
-        url: checkReponse,
-        data: { 'idQuestion': idQuestion },
-        success: function (data) {
-            $("#reponse-intitule").val(data.reponseQuestion)
-            $("#reponse-question").fadeOut()
-            setTimeout(function () {
-                $("#reponse-intitule").fadeIn()
-                $("#bonne-rep").removeClass("hidden")
-                $("#mauvaise-rep").removeClass("hidden")
-            }, 200)
+        data: { 'theme': theme },
+        success: function (response) {
+            $("#modal-animateurs-title").text("Thème : " + response.question.theme)
+            $("#level-difficulte").text(selectedDifficulte)
+            $("#question-difficulte").text(response.question.intitule)
+            $("#reponse-intitule").val(response.question.reponseValide)
         },
         error: function (error) {
 
         }
     })
-})
-
-$("#bonne-rep").on("click", function() {
-    let equipe = $('input[name="equipesRadio"]:checked').val()
-
-})
+    if(mystere !== true) {
+        setTimeout(function () {
+            $("#list-difficulte").fadeOut()
+            $("#question-difficulte").fadeIn()
+            $("#reponse-question").fadeIn()
+        }, 250)
+    }
+}
 
 function resetList() {
     let list = $(".li-prop")
     $(list).each(function (idx, el) {
         $(el).hasClass("prop-selected") ? $(el).removeClass("prop-selected") : ""
+    })
+}
+
+function addScore(equipe, idJeu, score) {
+    const routeSetScore = Routing.generate('set_score', { jeu: idJeu })
+    $.ajax({
+        url: routeSetScore,
+        type: 'POST',
+        data: {'equipe': equipe, 'score': score},
+        success: function(response) {
+            console.log(response)
+            $("#score-equipe-" + equipe).text(response.score)
+        },
+        error: function(error) {
+
+        }
     })
 }

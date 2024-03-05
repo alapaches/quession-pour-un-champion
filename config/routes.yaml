@@ -24,3 +24,15 @@ check_difficulte:
     defaults: { _controller: Jeux:getQuestionsByDifficulty }
     options:
         expose: true
+
+get_score:
+    path: /jeux/score/{jeu}/get
+    defaults: { _controller: Jeux:getScore }
+    options:
+        expose: true
+
+set_score:
+    path: /jeux/score/{jeu}/set
+    defaults: { _controller: Jeux:setScore }
+    options:
+        expose: true
