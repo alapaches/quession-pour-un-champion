@@ -28,7 +28,10 @@ $(function () {
             url: routeGetScores,
             type: 'GET',
             success: function(response) {
-                console.log(response)
+                let tabScores = response.tableauScores
+                $(tabScores).each(function(idx, val) {
+                    $("#score-equipe-"+val.equipe).text(val.score)
+                })
             }
         })
     }
@@ -141,7 +144,6 @@ $("#next-question").on("click", function () {
     $(currentQuestion).addClass("hidden")
     $(nextQuestion).removeClass("hidden")
     $(nextQuestion).addClass("current-question")
-
 })
 
 $(".div-icons").on("click", function () {
@@ -157,7 +159,6 @@ $(".div-icons").on("click", function () {
             $("#toast-error").fadeOut()
         }, 1500)
     } else {
-        // getQuestionsReponses()
         $.ajax({
             url: checkRoute,
             data: { 'idTheme': idTheme },
@@ -167,6 +168,7 @@ $(".div-icons").on("click", function () {
                 let tabDifficulte = response.difficulte
                 let tabQuestion = response.questions
                 if (lengthTabDifficulte === 1) {
+                    //mystère
                     $("#level-difficulte").text("3")
                     $("#question-difficulte").text(tabQuestion.intitule)
                     $("#id-question").text(tabQuestion.id)
@@ -174,8 +176,10 @@ $(".div-icons").on("click", function () {
                         $("#question-difficulte").fadeIn()
                     }, 0)
                     $("#modal-animateurs-title").text("Question Mystère")
-                    $("#list-difficulte").addClass("hidden")
+                    $("#list-difficulte").fadeOut()
                     $("#reponse-question").fadeIn()
+                } else {
+                    //autres questions
                 }
             },
             error: function (error) {
@@ -214,6 +218,42 @@ $("#bonne-rep").on("click", function () {
     addScore(equipe, jeu, difficulte)
 })
 
+$(".close-modal-reponse").on("click", function() {
+    let theme = $("#theme-id").text()
+    let question = $("#id-question").text()
+    $('input[name="equipesRadio"]').prop("checked", false)
+    $('input[name="select-difficulte"]').prop("checked", false)
+    $("#modal-animateurs-title").text("Sélectionnez la difficulté")
+    $("#list-difficulte").fadeIn()
+
+    $("#question-difficulte").fadeOut()
+    $("#reponse-intitule").fadeOut()
+    $("#theme-id").addClass("hidden")
+    $("#level-difficulte").addClass("hidden")
+    $("#id-question").addClass("hidden")
+
+    $("#bonne-rep").addClass("hidden")
+    $("#mauvaise-rep").addClass("hidden")
+    
+    verrouillageTheme(theme, question)
+
+})
+
+function verrouillageTheme(idTheme, idQuestion) {
+    const urlVerrouillage = Routing.generate('verouillage_theme', { id: idTheme })
+    $.ajax({
+        url: urlVerrouillage,
+        type: 'GET',
+        data: {'question': idQuestion},
+        success: function(response) {
+            console.log(response)
+        }, 
+        error: function(error) {
+
+        }
+    })
+}
+
 function getQuestionsReponses(mystere = false) {
     let selectedDifficulte = $('input[name="select-difficulte"]:checked').data("id") ? $('input[name="select-difficulte"]:checked').data("id") : "3"
     let theme = $("#theme-id").text()
@@ -244,6 +284,7 @@ function getQuestionsReponses(mystere = false) {
     }
 }
 
+
 function resetList() {
     let list = $(".li-prop")
     $(list).each(function (idx, el) {
@@ -258,7 +299,6 @@ function addScore(equipe, idJeu, score) {
         type: 'POST',
         data: {'equipe': equipe, 'score': score},
         success: function(response) {
-            console.log(response)
             $("#score-equipe-" + equipe).text(response.score)
         },
         error: function(error) {

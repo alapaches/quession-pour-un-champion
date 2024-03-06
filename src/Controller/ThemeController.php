@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Question;
 use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Repository\ThemeRepository;
@@ -14,6 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/theme')]
 class ThemeController extends AbstractController
 {
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     #[Route('/', name: 'app_theme_index', methods: ['GET'])]
     public function index(ThemeRepository $themeRepository): Response
     {
@@ -71,11 +79,43 @@ class ThemeController extends AbstractController
     #[Route('/{id}', name: 'app_theme_delete', methods: ['POST'])]
     public function delete(Request $request, Theme $theme, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$theme->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $theme->getId(), $request->request->get('_token'))) {
             $entityManager->remove($theme);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_theme_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/question/{id}/verouillage', name: 'app_theme_verouillage', methods: ['GET', 'POST'])]
+    public function verouillage(Request $request): Response
+    {
+        $idTheme = intval($request->get("id"));
+        $idQuestion = intval($request->query->get("question"));
+        $tabQuestionTheme = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme, "completion" => false]);
+        $question = $this->em->getRepository(Question::class)->findOneById($idQuestion);
+        $countQuestionTheme = count($tabQuestionTheme);
+        switch ($countQuestionTheme) {
+            case 2:
+            case 1:
+                $question->setCompletion(true);
+                break;
+            default:
+        }
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+        return $this->json([]);
     }
 }

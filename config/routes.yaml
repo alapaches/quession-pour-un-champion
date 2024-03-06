@@ -36,3 +36,9 @@ set_score:
     defaults: { _controller: Jeux:setScore }
     options:
         expose: true
+
+verouillage_theme:
+    path: /theme/question/{id}/verouillage
+    defaults: { _controller: Theme:verouillage }
+    options:
+        expose: true

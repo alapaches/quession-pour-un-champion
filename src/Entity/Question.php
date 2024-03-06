@@ -38,6 +38,9 @@ class Question
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $difficulte = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $completion = null;
+
     public function __construct()
     {
         $this->propositions = new ArrayCollection();
@@ -122,6 +125,18 @@ class Question
     public function setDifficulte(string $difficulte): static
     {
         $this->difficulte = $difficulte;
+
+        return $this;
+    }
+
+    public function isCompletion(): ?bool
+    {
+        return $this->completion;
+    }
+
+    public function setCompletion(?bool $completion): static
+    {
+        $this->completion = $completion;
 
         return $this;
     }

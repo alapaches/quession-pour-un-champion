@@ -103,21 +103,22 @@ class JeuxController extends AbstractController
     {
         $idJeu = intval($request->get("id"));
         $idTheme = intval($request->get("idTheme"));
-        $tabDifficulte = [];
+        $tmpTabDifficulte = [];
         if ($idTheme) {
-            switch ($idTheme) {
-                case 11:
-                    $tabQuestions = $this->em->getRepository(Question::class)->findOneBy(["theme" => $idTheme]);
+            $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme]);
+            foreach ($tabQuestions as $question) {
+                if($idTheme === 11) {
                     $difficulte = "Mystère";
-                    array_push($tabDifficulte, $difficulte);
-                    break;
-                default:
-                    $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme]);
-                    foreach ($tabQuestions as $question) {
-                        $difficulte = $question->getDifficulte() === "1" ? "Facile" : "Difficile";
-                        array_push($tabDifficulte, $difficulte);
-                    }
+                } else {
+                    $difficulte = $question->getDifficulte() === "1" ? "Facile" : "Difficile";
+                }
+                array_push($tmpTabDifficulte, $difficulte);
             }
+            $tabDifficulte = array_unique($tmpTabDifficulte);
+            // dump($tabQuestions);
+            // dump($tmpTabDifficulte);
+            // dump($tabDifficulte);
+            // die();
             return $this->json([
                 "questions" => $tabQuestions,
                 "difficulte" => $tabDifficulte

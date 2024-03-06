@@ -13,7 +13,7 @@
 			<div class="row">
 				<div class="col-2">
 					<div class="card">
-						<div class="card-header">
+						<div class="card-header text-bg-dark">
 							<strong>Équipes</strong>
 						</div>
 						<ul class="list-group">
@@ -50,6 +50,9 @@
 								</div>
 							{% endfor %}
 						{% elseif (jeu.id == 2) %}
+							<div class="card-header text-bg-dark">
+								<strong>Choissez l'équipe puis un thème</strong>
+							</div>
 							{% for theme in themes|sort((a,b) => random(-1,1)) %}
 								{% set loopIcons = loopIcons + 1 %}
 								{% if (loopIcons in [1, 5, 9, 13]) %}
@@ -130,11 +133,13 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button id="bonne-rep" type="button" class="btn btn-success hidden" data-bs-dismiss="modal">
-							<i class="fa-solid fa-check"></i> Bonne réponse
+						<button id="bonne-rep" type="button" class="btn btn-success hidden close-modal-reponse" data-bs-dismiss="modal">
+							<i class="fa-solid fa-check"></i>
+							Bonne réponse
 						</button>
-						<button id="mauvaise-rep" type="button" class="btn btn-danger hidden" data-bs-dismiss="modal">
-							<i class="fa-solid fa-xmark"></i> Mauvaise Réponse
+						<button id="mauvaise-rep" type="button" class="btn btn-danger hidden close-modal-reponse" data-bs-dismiss="modal">
+							<i class="fa-solid fa-xmark"></i>
+							Mauvaise Réponse
 						</button>
 					</div>
 				</div>
