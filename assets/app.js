@@ -27,10 +27,10 @@ $(function () {
         $.ajax({
             url: routeGetScores,
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 let tabScores = response.tableauScores
-                $(tabScores).each(function(idx, val) {
-                    $("#score-equipe-"+val.equipe).text(val.score)
+                $(tabScores).each(function (idx, val) {
+                    $("#score-equipe-" + val.equipe).text(val.score)
                 })
             }
         })
@@ -165,22 +165,24 @@ $(".div-icons").on("click", function () {
             type: 'GET',
             success: function (response) {
                 let lengthTabDifficulte = response.difficulte.length
-                let tabDifficulte = response.difficulte
-                let tabQuestion = response.questions
+                let difficulty = ""
+                let titreModal = ""
                 if (lengthTabDifficulte === 1) {
-                    //mystère
-                    $("#level-difficulte").text("3")
+                    let tabQuestion = response.questions[0]
                     $("#question-difficulte").text(tabQuestion.intitule)
                     $("#id-question").text(tabQuestion.id)
+                    $("#list-difficulte").fadeOut()
+                    difficulty = idTheme === 11 ? "3" : tabQuestion.difficulte
+                    titreModal = idTheme === 11 ? "Question Mystère" : "Thème : " + response.theme
                     setTimeout(function () {
                         $("#question-difficulte").fadeIn()
+                        $("#reponse-question").fadeIn()
                     }, 0)
-                    $("#modal-animateurs-title").text("Question Mystère")
-                    $("#list-difficulte").fadeOut()
-                    $("#reponse-question").fadeIn()
                 } else {
-                    //autres questions
+                    titreModal = "Sélectionnez la difficulté"
                 }
+                $("#level-difficulte").text(difficulty)
+                $("#modal-animateurs-title").text(titreModal)
             },
             error: function (error) {
 
@@ -210,33 +212,32 @@ $("#reponse-question").on("click", function () {
 
 $("#bonne-rep").on("click", function () {
     let equipe = $('input[name="equipesRadio"]:checked').val()
-    let difficulte = $('input[name="select-difficulte"]:checked').data("id") ? $('input[name="select-difficulte"]:checked').data("id") : "3"
+    let difficulte = $("#level-difficulte").text()
     let jeu = $("#jeu-id").val()
     equipe = parseInt(equipe, 10)
     difficulte = parseInt(difficulte, 10)
     jeu = parseInt(jeu, 10)
+
     addScore(equipe, jeu, difficulte)
 })
 
-$(".close-modal-reponse").on("click", function() {
+$(".close-modal-reponse").on("click", function () {
     let theme = $("#theme-id").text()
     let question = $("#id-question").text()
     $('input[name="equipesRadio"]').prop("checked", false)
     $('input[name="select-difficulte"]').prop("checked", false)
     $("#modal-animateurs-title").text("Sélectionnez la difficulté")
     $("#list-difficulte").fadeIn()
-
     $("#question-difficulte").fadeOut()
     $("#reponse-intitule").fadeOut()
+    $("#reponse-intitule").val("")
     $("#theme-id").addClass("hidden")
     $("#level-difficulte").addClass("hidden")
+    $("#level-difficulte").text("")
     $("#id-question").addClass("hidden")
-
     $("#bonne-rep").addClass("hidden")
     $("#mauvaise-rep").addClass("hidden")
-    
     verrouillageTheme(theme, question)
-
 })
 
 function verrouillageTheme(idTheme, idQuestion) {
@@ -244,18 +245,21 @@ function verrouillageTheme(idTheme, idQuestion) {
     $.ajax({
         url: urlVerrouillage,
         type: 'GET',
-        data: {'question': idQuestion},
-        success: function(response) {
-            console.log(response)
-        }, 
-        error: function(error) {
+        data: { 'question': idQuestion },
+        success: function (response) {
+            if(response.completion === true) {
+                $("#icon-"+idTheme).addClass("card-disabled")
+            }
+        },
+        error: function (error) {
 
         }
     })
 }
 
 function getQuestionsReponses(mystere = false) {
-    let selectedDifficulte = $('input[name="select-difficulte"]:checked').data("id") ? $('input[name="select-difficulte"]:checked').data("id") : "3"
+    let currentDifficulty = $("#level-difficulte").text()
+    let selectedDifficulte = currentDifficulty == "" ? $('input[name="select-difficulte"]:checked').data("id") : currentDifficulty
     let theme = $("#theme-id").text()
     setTimeout(function () {
         $("#level-difficulte").text(selectedDifficulte)
@@ -267,6 +271,7 @@ function getQuestionsReponses(mystere = false) {
         data: { 'theme': theme },
         success: function (response) {
             $("#modal-animateurs-title").text("Thème : " + response.question.theme)
+            $("#id-question").text(response.question.id)
             $("#level-difficulte").text(selectedDifficulte)
             $("#question-difficulte").text(response.question.intitule)
             $("#reponse-intitule").val(response.question.reponseValide)
@@ -275,7 +280,7 @@ function getQuestionsReponses(mystere = false) {
 
         }
     })
-    if(mystere !== true) {
+    if (mystere !== true) {
         setTimeout(function () {
             $("#list-difficulte").fadeOut()
             $("#question-difficulte").fadeIn()
@@ -297,11 +302,11 @@ function addScore(equipe, idJeu, score) {
     $.ajax({
         url: routeSetScore,
         type: 'POST',
-        data: {'equipe': equipe, 'score': score},
-        success: function(response) {
+        data: { 'equipe': equipe, 'score': score },
+        success: function (response) {
             $("#score-equipe-" + equipe).text(response.score)
         },
-        error: function(error) {
+        error: function (error) {
 
         }
     })

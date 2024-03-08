@@ -30,6 +30,7 @@
 				<div class="col-8">
 					<div class="card">
 						{% set loopIcons = 0 %}
+						{% set loopSons = 0 %}
 						{% if (jeu.id == 1) %}
 							{% for question in questions %}
 								<div data-id="{{question.id}}" class="question {% if loop.index != 1 %}hidden{% else %}current-question{% endif %}">
@@ -55,23 +56,35 @@
 							</div>
 							{% for theme in themes|sort((a,b) => random(-1,1)) %}
 								{% set loopIcons = loopIcons + 1 %}
+								{% set compteurCompletion = 0 %}
+								{% for question in theme.getQuestions %}
+									{% if question.completion == true %}
+										{% set compteurCompletion = compteurCompletion + 1 %}
+									{% endif %}
+								{% endfor %}
 								{% if (loopIcons in [1, 5, 9, 13]) %}
 									<div class="row row-grid">
-										<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
+										<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
 									{% elseif (loopIcons in [4, 8, 12, 16]) %}
-										<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
+										<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
 											<i class="{{theme.icon}} icon-game"></i>
 										</div>
 									</div>
 								{% else %}
-									<div data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons">
+									<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
 										<i class="{{theme.icon}} icon-game"></i>
 									</div>
 								{% endif %}
 							{% endfor %}
-							{% elseif (jeu.id == 3) %}
+						{% elseif (jeu.id == 3) %}
+							{% for son in sons %}
+								{% set loopSons = loopSons + 1 %}
+								{% if (loopIcons in [1, 4, 7, 10]) %}
+								{% elseif (loopIcons in [4, 8, 12, 16]) %}
+								{% else %}
+							{% endfor %}
 						{% endif %}
 					</div>
 				</div>

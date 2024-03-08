@@ -91,31 +91,18 @@ class ThemeController extends AbstractController
     public function verouillage(Request $request): Response
     {
         $idTheme = intval($request->get("id"));
-        $idQuestion = intval($request->query->get("question"));
-        $tabQuestionTheme = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme, "completion" => false]);
-        $question = $this->em->getRepository(Question::class)->findOneById($idQuestion);
-        $countQuestionTheme = count($tabQuestionTheme);
-        switch ($countQuestionTheme) {
-            case 2:
-            case 1:
-                $question->setCompletion(true);
-                break;
-            default:
+        $idQuestion = intval($request->get("question"));
+        $countQuestionCompletees = count($this->em->getRepository(Question::class)->findBy(["theme" => $idTheme, "completion" => false]));
+        $completion = false;
+        if($countQuestionCompletees === 2 || $countQuestionCompletees === 1) {
+            $question = $this->em->getRepository(Question::class)->findOneById($idQuestion);
+            $question->setCompletion(true);
+            $countQuestionCompletees --;
+
+            $this->em->flush();
         }
+        $completion = $countQuestionCompletees === 0 ? true : false;
 
-
-        
-
-
-
-
-
-
-
-
-
-
-
-        return $this->json([]);
+        return $this->json(["completion" => $completion]);
     }
 }

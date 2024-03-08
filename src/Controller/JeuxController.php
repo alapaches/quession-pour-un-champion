@@ -9,9 +9,11 @@ use App\Entity\Question;
 use App\Entity\Proposition;
 use App\Entity\Score;
 use App\Entity\ScoreEquipe;
+use App\Entity\Son;
 use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\JeuxRepository;
+use App\Service\JeuService;
 use App\Service\ScoreService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,13 +90,14 @@ class JeuxController extends AbstractController
         $equipes = $this->em->getRepository(Equipe::class)->findAll();
         $themes = $this->em->getRepository(Theme::class)->findAll();
         $questions = $this->em->getRepository(Question::class)->findBy(array("jeu" => $jeu));
-
+        $sons = $this->em->getRepository(Son::class)->findAll();
 
         return $this->render('jeux/running.html.twig', [
             'jeu' => $jeu,
             'questions' => $questions,
             'equipes' => $equipes,
             'themes' => $themes,
+            'sons' => $sons,
         ]);
     }
 
@@ -105,7 +108,10 @@ class JeuxController extends AbstractController
         $idTheme = intval($request->get("idTheme"));
         $tmpTabDifficulte = [];
         if ($idTheme) {
-            $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme]);
+            // $jeuService = new JeuService($this->em);
+            $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme, "completion" => false]);
+            $theme = $this->em->getRepository(Theme::class)->findOneById($idTheme)->getNom();
+            
             foreach ($tabQuestions as $question) {
                 if($idTheme === 11) {
                     $difficulte = "Mystère";
@@ -115,13 +121,11 @@ class JeuxController extends AbstractController
                 array_push($tmpTabDifficulte, $difficulte);
             }
             $tabDifficulte = array_unique($tmpTabDifficulte);
-            // dump($tabQuestions);
-            // dump($tmpTabDifficulte);
-            // dump($tabDifficulte);
-            // die();
+
             return $this->json([
                 "questions" => $tabQuestions,
-                "difficulte" => $tabDifficulte
+                "difficulte" => $tabDifficulte,
+                "theme" => $theme
             ], 200, [], ['groups' => 'jeu']);
         } else {
             $equipeParam = intval($request->request->get("equipe"));
@@ -183,10 +187,14 @@ class JeuxController extends AbstractController
     {
         $difficulte = intval($request->get("difficulte"));
         $theme = intval($request->query->get("theme"));
+        // dump($difficulte);
+        // dump($theme);
+        // die();
         $titreTheme = $this->em->getRepository(Theme::class)->findOneById($theme)->getNom();
         $question = [];
         $questionsEntity = $this->em->getRepository(Question::class)->findOneBy(["theme" => $theme, "difficulte" => $difficulte]);
         $questionsTab = $questionsEntity->getPropositions()->toArray()[0];
+        $question["id"] = $questionsEntity->getId();
         $question["intitule"] = $questionsEntity->getIntitule();
         $question["theme"] = $titreTheme;
         $question["reponseValide"] = $questionsTab->getTitre();
