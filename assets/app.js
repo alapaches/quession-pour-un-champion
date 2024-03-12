@@ -196,6 +196,40 @@ $(".div-icons").on("click", function () {
     }
 })
 
+$(".div-sons").on("click", function () {
+    let idSon = $(this).data("id")
+    let idJeu = $("#jeu-id").val()
+    let equipeId = $('input[name="equipesRadio"]:checked').val()
+    let currentSon = $("#current-son")
+    let modalSon = $("#modal-son")
+    let assetsDir = $(currentSon).data("assets")
+    const checkSonRoute = Routing.generate('check_sons', { jeuId: idJeu, sonId: idSon })
+    if (!equipeId) {
+        $("#toast-body").text("Veuillez sélectionner une équipe")
+        $("#toast-error").fadeIn()
+        setTimeout(function () {
+            $("#toast-error").fadeOut()
+        }, 1500)
+    } else {
+        $.ajax({
+            url: checkSonRoute,
+            type: 'GET',
+            data: { 'equipe': equipeId },
+            success: function (response) {
+                setTimeout(function() {
+                    currentSon.attr("src", "http://127.0.0.1:8000/assets/sounds/" + response.son.nom + ".mp3")
+                }, 200)
+            },
+            error: function (error) {
+
+            },
+            complete: function() {
+                $(modalSon).modal("show")
+            }
+        })
+    }
+})
+
 $('input[name="select-difficulte"]').on("click", function () {
     getQuestionsReponses()
 })
@@ -247,8 +281,8 @@ function verrouillageTheme(idTheme, idQuestion) {
         type: 'GET',
         data: { 'question': idQuestion },
         success: function (response) {
-            if(response.completion === true) {
-                $("#icon-"+idTheme).addClass("card-disabled")
+            if (response.completion === true) {
+                $("#icon-" + idTheme).addClass("card-disabled")
             }
         },
         error: function (error) {

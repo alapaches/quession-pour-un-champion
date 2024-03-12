@@ -62,28 +62,43 @@
 										{% set compteurCompletion = compteurCompletion + 1 %}
 									{% endif %}
 								{% endfor %}
-								{% if (loopIcons in [1, 5, 9, 13]) %}
+								{% if (loopIcons in [1, 5, 9, 13, 17]) %}
 									<div class="row row-grid">
 										<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
-											<i class="{{theme.icon}} icon-game"></i>
+											<img class="icon-game" src="{{ asset('images/' ~ theme.icon ~ '.png') }}" alt="">
 										</div>
-									{% elseif (loopIcons in [4, 8, 12, 16]) %}
+									{% elseif (loopIcons in [4, 8, 12, 16, 20]) %}
 										<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
-											<i class="{{theme.icon}} icon-game"></i>
+											<img class="icon-game" src="{{ asset('images/' ~ theme.icon ~ '.png') }}" alt="">
 										</div>
 									</div>
 								{% else %}
 									<div id="icon-{{theme.id}}" data-theme="{{theme.id}}" class="col-3 flex-center-div div-icons {% if (compteurCompletion == 2) %}card-disabled{% endif %}">
-										<i class="{{theme.icon}} icon-game"></i>
+										<img class="icon-game" src="{{ asset('images/' ~ theme.icon ~ '.png') }}" alt="">
 									</div>
 								{% endif %}
 							{% endfor %}
 						{% elseif (jeu.id == 3) %}
+							<div class="card-header text-bg-dark">
+								<strong>Choissez l'équipe puis un numéro de son</strong>
+							</div>
 							{% for son in sons %}
 								{% set loopSons = loopSons + 1 %}
-								{% if (loopIcons in [1, 4, 7, 10]) %}
-								{% elseif (loopIcons in [4, 8, 12, 16]) %}
+								{% if (loopSons in [1, 4, 7, 10, 13, 16, 19, 22]) %}
+									<div class="row row-grid">
+										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+											<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
+										</div>
+								{% elseif (loopSons in [3, 6, 9, 12, 15, 18, 21]) %}
+									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+										<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
+									</div>
+								</div>
 								{% else %}
+									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+										<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
+									</div>
+								{% endif %}
 							{% endfor %}
 						{% endif %}
 					</div>
@@ -154,6 +169,22 @@
 							<i class="fa-solid fa-xmark"></i>
 							Mauvaise Réponse
 						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal sons -->
+		<div class="modal fade" id="modal-son" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="modal-son-title"></h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div id="modal-son-body" class="modal-body">
+						<audio controls class="w-100">
+							<source id="current-son" src="" type="audio/mpeg" />
+						</audio>
 					</div>
 				</div>
 			</div>

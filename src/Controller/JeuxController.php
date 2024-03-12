@@ -160,6 +160,21 @@ class JeuxController extends AbstractController
         }
     }
 
+    #[Route('/{jeuId}/son/{sonId}/check', name: 'app_jeux_sons_check', methods: ['GET', 'POST'])]
+    public function checkSons(Request $request): Response
+    {
+        $idJeu = intval($request->get("jeuId"));
+        $idSon = intval($request->get("sonId"));
+        $son = $this->em->getRepository(Son::class)->findOneById($idSon);
+        // dd($son);
+
+        return $this->json([
+            "son" => [
+                "nom" => $son->getNom()
+            ]
+        ], 200, [], ['groups' => 'jeu']);
+    }
+
     #[Route('/{id}', name: 'app_jeux_delete', methods: ['POST'])]
     public function delete(Request $request, Jeux $jeux, EntityManagerInterface $entityManager): Response
     {

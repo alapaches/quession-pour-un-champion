@@ -13,6 +13,12 @@ check_jeux:
     options:
         expose: true
 
+check_sons:
+    path: /jeux/{jeuId}/son/{sonId}/check
+    defaults: { _controller: Jeux:checkSons }
+    options:
+        expose: true
+
 check_reponse:
     path: /jeux/reponse/{id}/get
     defaults: { _controller: Jeux:getReponse }

@@ -119,26 +119,26 @@ body {
   margin-bottom: 10px;
 }
 
-.icon-game {
+.icon-game, .son-game {
     width: 50%;
     height: 50%;
-    margin: 0 25% 0 25%;
+    margin: 0 33% 0 33%;
 }
 
 .row-grid {
     margin: auto;
 }
 
-.div-icons {
+.div-icons, .div-sons {
     border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
     border: 2px solid black;
 }
 
-.div-icons:hover {
+.div-icons:hover, .div-sons:hover {
   cursor: pointer;
 }
 
-.div-icons.disabled:hover {
+.div-icons.disabled:hover,.div-sons.disabled:hover {
   cursor: not-allowed;
 }
 

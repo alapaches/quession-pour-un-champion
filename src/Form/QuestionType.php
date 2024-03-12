@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Jeux;
 use App\Entity\Question;
 use App\Entity\Theme;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,7 +24,11 @@ class QuestionType extends AbstractType
             ])
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.nom', 'ASC');
+                }
             ])
             ->add('difficulte', ChoiceType::class, [
                 'choices' => [
