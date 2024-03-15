@@ -89,11 +89,11 @@
 										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
 											<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
 										</div>
-								{% elseif (loopSons in [3, 6, 9, 12, 15, 18, 21]) %}
-									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
-										<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
+									{% elseif (loopSons in [3, 6, 9, 12, 15, 18, 21]) %}
+										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+											<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
+										</div>
 									</div>
-								</div>
 								{% else %}
 									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
 										<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
@@ -179,12 +179,31 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h1 class="modal-title fs-5" id="modal-son-title"></h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						<button type="button" class="btn-close btn-close-modal-son" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div id="modal-son-body" class="modal-body">
-						<audio controls class="w-100">
-							<source id="current-son" src="" type="audio/mpeg" />
-						</audio>
+						<div id="audio-div"></div>
+						<div class="container-fluid">
+							<div class="center">
+								<button id="btn-reponse-son" class="btn btn-primary">
+									<i class="fa-solid fa-eye"></i>
+									Voir la réponse
+								</button>
+								<div class="input-group mb-3">
+									<input id="input-reponse-son" type="text" class="form-control" disabled>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="bonne-rep-son" type="button" class="btn btn-success hidden close-modal-reponse-son" data-bs-dismiss="modal">
+							<i class="fa-solid fa-check"></i>
+							Bonne réponse
+						</button>
+						<button id="mauvaise-rep-son" type="button" class="btn btn-danger hidden close-modal-reponse-son" data-bs-dismiss="modal">
+							<i class="fa-solid fa-xmark"></i>
+							Mauvaise Réponse
+						</button>
 					</div>
 				</div>
 			</div>

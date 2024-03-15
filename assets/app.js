@@ -198,11 +198,12 @@ $(".div-icons").on("click", function () {
 
 $(".div-sons").on("click", function () {
     let idSon = $(this).data("id")
+    let img = $(this).children("img").attr("src")
     let idJeu = $("#jeu-id").val()
     let equipeId = $('input[name="equipesRadio"]:checked').val()
     let currentSon = $("#current-son")
     let modalSon = $("#modal-son")
-    let assetsDir = $(currentSon).data("assets")
+    let audioDiv = $("#audio-div")
     const checkSonRoute = Routing.generate('check_sons', { jeuId: idJeu, sonId: idSon })
     if (!equipeId) {
         $("#toast-body").text("Veuillez sélectionner une équipe")
@@ -216,18 +217,30 @@ $(".div-sons").on("click", function () {
             type: 'GET',
             data: { 'equipe': equipeId },
             success: function (response) {
-                setTimeout(function() {
-                    currentSon.attr("src", "http://127.0.0.1:8000/assets/sounds/" + response.son.nom + ".mp3")
-                }, 200)
+                let audio = document.createElement('audio')
+                let source = document.createElement('source')
+                $(audioDiv).append(audio)
+                audio.appendChild(source)
+                source.setAttribute('src', response.son.src)
+                source.setAttribute('type', 'audio/mpeg')
+                audio.setAttribute('controls', 'controls')
+                audio.classList.add('w-100')
+                $("#modal-son-title").text("Catégorie : " + response.son.categorie)
             },
             error: function (error) {
 
             },
             complete: function() {
-                $(modalSon).modal("show")
+                setTimeout(function() {
+                    $(modalSon).modal("show")
+                }, 250)
             }
         })
     }
+})
+
+$(".btn-close-modal-son").on("click", function() {
+    $("#audio-div").empty()
 })
 
 $('input[name="select-difficulte"]').on("click", function () {
@@ -241,6 +254,16 @@ $("#reponse-question").on("click", function () {
         $("#reponse-intitule").fadeIn()
         $("#bonne-rep").removeClass("hidden")
         $("#mauvaise-rep").removeClass("hidden")
+    }, 200)
+})
+
+$("#btn-reponse-son").on("click", function () {
+    $(this).fadeOut()
+    // getQuestionsReponses(true)
+    setTimeout(function () {
+        $("#reponse-intitule").fadeIn()
+        $("#bonne-rep-son").removeClass("hidden")
+        $("#mauvaise-rep-son").removeClass("hidden")
     }, 200)
 })
 
@@ -273,6 +296,10 @@ $(".close-modal-reponse").on("click", function () {
     $("#mauvaise-rep").addClass("hidden")
     verrouillageTheme(theme, question)
 })
+
+function getResponseSon() {
+
+}
 
 function verrouillageTheme(idTheme, idQuestion) {
     const urlVerrouillage = Routing.generate('verouillage_theme', { id: idTheme })
@@ -322,7 +349,6 @@ function getQuestionsReponses(mystere = false) {
         }, 250)
     }
 }
-
 
 function resetList() {
     let list = $(".li-prop")

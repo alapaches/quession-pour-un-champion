@@ -13,21 +13,23 @@ use App\Entity\Son;
 use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\JeuxRepository;
-use App\Service\JeuService;
-use App\Service\ScoreService;
+use App\Service\AudioService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[Route('/jeux')]
 class JeuxController extends AbstractController
 {
     private EntityManagerInterface $em;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
     {
         $this->em = $em;
+        $this->parameterBag = $parameterBag;
     }
 
     #[Route('/', name: 'app_jeux_index', methods: ['GET'])]
@@ -165,12 +167,14 @@ class JeuxController extends AbstractController
     {
         $idJeu = intval($request->get("jeuId"));
         $idSon = intval($request->get("sonId"));
+        $audioService = new AudioService();
         $son = $this->em->getRepository(Son::class)->findOneById($idSon);
-        // dd($son);
-
+        $sonSrc = $audioService->getStorageFileUrl($son->getNom().".mp3", ['sounds']);
+        
         return $this->json([
             "son" => [
-                "nom" => $son->getNom()
+                "categorie" => $son->getCategorie()->getNom(),
+                "src" => $sonSrc
             ]
         ], 200, [], ['groups' => 'jeu']);
     }

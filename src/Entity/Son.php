@@ -19,13 +19,12 @@ class Son
     #[ORM\Column]
     private ?int $points = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sons')]
+    #[ORM\ManyToOne(inversedBy: 'sons', fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    #[ORM\OneToOne(inversedBy: 'son', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Proposition $proposition = null;
+    #[ORM\OneToOne(mappedBy: 'son', cascade: ['persist', 'remove'])]
+    private ?Reponse $reponse = null;
 
     public function getId(): ?int
     {
@@ -68,14 +67,24 @@ class Son
         return $this;
     }
 
-    public function getProposition(): ?Proposition
+    public function getReponse(): ?Reponse
     {
-        return $this->proposition;
+        return $this->reponse;
     }
 
-    public function setProposition(Proposition $proposition): static
+    public function setReponse(?Reponse $reponse): static
     {
-        $this->proposition = $proposition;
+        // unset the owning side of the relation if necessary
+        if ($reponse === null && $this->reponse !== null) {
+            $this->reponse->setSon(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($reponse !== null && $reponse->getSon() !== $this) {
+            $reponse->setSon($this);
+        }
+
+        $this->reponse = $reponse;
 
         return $this;
     }

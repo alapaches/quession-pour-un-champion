@@ -23,9 +23,6 @@ class Proposition
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question = null;
 
-    #[ORM\OneToOne(mappedBy: 'proposition', cascade: ['persist', 'remove'])]
-    private ?Son $son = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -63,23 +60,6 @@ class Proposition
     public function setQuestion(?Question $question): static
     {
         $this->question = $question;
-
-        return $this;
-    }
-
-    public function getSon(): ?Son
-    {
-        return $this->son;
-    }
-
-    public function setSon(Son $son): static
-    {
-        // set the owning side of the relation if necessary
-        if ($son->getProposition() !== $this) {
-            $son->setProposition($this);
-        }
-
-        $this->son = $son;
 
         return $this;
     }

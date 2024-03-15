@@ -17,7 +17,7 @@ Encore
 
     .addPlugin(new FosRouting(
         { target: './assets/js/fos_js_routes.json' }, // <- path to dumped routes.json
-        false // <- set false to suppress automatic recompilation of the file
+        true // <- set false to suppress automatic recompilation of the file
         )
     )
 
