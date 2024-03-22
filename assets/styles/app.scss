@@ -150,7 +150,7 @@ body {
   text-align: center;
 }
 
-#reponse-intitule {
+#reponse-intitule, #input-reponse-son {
   text-align: center;
   font-weight: bold;
 }
@@ -158,4 +158,8 @@ body {
 .card-disabled {
   pointer-events: none;
   opacity: 0.2;
+}
+
+.container-audio {
+  margin-top: 15px;
 }

@@ -204,6 +204,7 @@ $(".div-sons").on("click", function () {
     let currentSon = $("#current-son")
     let modalSon = $("#modal-son")
     let audioDiv = $("#audio-div")
+    let inputReponseSon = $("#input-reponse-son")
     const checkSonRoute = Routing.generate('check_sons', { jeuId: idJeu, sonId: idSon })
     if (!equipeId) {
         $("#toast-body").text("Veuillez sélectionner une équipe")
@@ -216,16 +217,17 @@ $(".div-sons").on("click", function () {
             url: checkSonRoute,
             type: 'GET',
             data: { 'equipe': equipeId },
-            success: function (response) {
+            success: function (responseData) {
                 let audio = document.createElement('audio')
                 let source = document.createElement('source')
                 $(audioDiv).append(audio)
                 audio.appendChild(source)
-                source.setAttribute('src', response.son.src)
+                source.setAttribute('src', responseData.son.src)
                 source.setAttribute('type', 'audio/mpeg')
                 audio.setAttribute('controls', 'controls')
                 audio.classList.add('w-100')
-                $("#modal-son-title").text("Catégorie : " + response.son.categorie)
+                $("#modal-son-title").text("Catégorie : " + responseData.son.categorie)
+                $(inputReponseSon).val(responseData.son.reponse)
             },
             error: function (error) {
 
@@ -261,7 +263,7 @@ $("#btn-reponse-son").on("click", function () {
     $(this).fadeOut()
     // getQuestionsReponses(true)
     setTimeout(function () {
-        $("#reponse-intitule").fadeIn()
+        $("#input-reponse-son").fadeIn()
         $("#bonne-rep-son").removeClass("hidden")
         $("#mauvaise-rep-son").removeClass("hidden")
     }, 200)

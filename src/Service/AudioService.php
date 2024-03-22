@@ -13,9 +13,9 @@ class AudioService
         $this->url = $this->baseUrl.$this->projectId.'/o/';
     }
 
-    public function getStorageFileUrl($name, $path = []) {
-        if(sizeof($path) > 0) {
-            $this->url .= implode('%2F', $path).'%2F';
+    public function getStorageFileUrl($name, $arborescence = []) {
+        if(sizeof($arborescence) > 0) {
+            $this->url .= implode('%2F', $arborescence).'%2F';
         }
 
         return $this->url.$name.'?alt=media';

@@ -23,7 +23,7 @@ class Son
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    #[ORM\OneToOne(mappedBy: 'son', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'son', cascade: ['persist', 'remove'], fetch: "EAGER")]
     private ?Reponse $reponse = null;
 
     public function getId(): ?int
