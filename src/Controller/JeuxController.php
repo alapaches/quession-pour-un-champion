@@ -110,7 +110,6 @@ class JeuxController extends AbstractController
         $idTheme = intval($request->get("idTheme"));
         $tmpTabDifficulte = [];
         if ($idTheme) {
-            // $jeuService = new JeuService($this->em);
             $tabQuestions = $this->em->getRepository(Question::class)->findBy(["theme" => $idTheme, "completion" => false]);
             $theme = $this->em->getRepository(Theme::class)->findOneById($idTheme)->getNom();
             
@@ -207,9 +206,6 @@ class JeuxController extends AbstractController
     {
         $difficulte = intval($request->get("difficulte"));
         $theme = intval($request->query->get("theme"));
-        // dump($difficulte);
-        // dump($theme);
-        // die();
         $titreTheme = $this->em->getRepository(Theme::class)->findOneById($theme)->getNom();
         $question = [];
         $questionsEntity = $this->em->getRepository(Question::class)->findOneBy(["theme" => $theme, "difficulte" => $difficulte]);

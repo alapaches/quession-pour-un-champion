@@ -299,6 +299,10 @@ $(".close-modal-reponse").on("click", function () {
     verrouillageTheme(theme, question)
 })
 
+$(".close-modal-reponse-son").on("click", function() {
+    
+})
+
 function getResponseSon() {
 
 }

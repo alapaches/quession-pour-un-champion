@@ -78,4 +78,10 @@ class SonController extends AbstractController
 
         return $this->redirectToRoute('app_son_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{idSon}/check/', name: 'app_son_check', methods: ['GET','POST'])]
+    public function check(Request $request): Response
+    {
+        
+    }
 }
