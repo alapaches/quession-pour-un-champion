@@ -206,6 +206,7 @@ $(".div-sons").on("click", function () {
     let audioDiv = $("#audio-div")
     let inputReponseSon = $("#input-reponse-son")
     const checkSonRoute = Routing.generate('check_sons', { jeuId: idJeu, sonId: idSon })
+    $("#son-id").val(idSon)
     if (!equipeId) {
         $("#toast-body").text("Veuillez sélectionner une équipe")
         $("#toast-error").fadeIn()
@@ -300,11 +301,40 @@ $(".close-modal-reponse").on("click", function () {
 })
 
 $(".close-modal-reponse-son").on("click", function() {
-    
+    let typeResponse = $(this).data("check")
+    getResponseSon(typeResponse)
+    resetSon()
 })
 
-function getResponseSon() {
+function getResponseSon(typeRep) {
+    let idSon = $("#son-id").val()
+    let idJeu = $("#jeu-id").val()
+    let equipe = $('input[name="equipesRadio"]:checked').val()
+    equipe = parseInt(equipe, 10)
+    const urlCheckSonReponse = Routing.generate('check_sons_reponse', { sonId: idSon, jeuId: idJeu })
+    $.ajax({
+        url: urlCheckSonReponse,
+        type: 'GET',
+        data: {'typeRep': typeRep, 'equipe': equipe},
+        success: function(dataResponse) {
+            console.log(dataResponse)
+            typeRep === true ? $("#son-" + idSon).addClass("card-disabled") : ''
+        },
+        error: function(error) {
 
+        }
+    })
+}
+
+function resetSon() {
+    let audioDiv = $("#audio-div")
+    let audioResponse = $("#input-reponse-son")
+    $(audioDiv).empty()
+    $(audioResponse).val('')
+    $(audioResponse).fadeOut()
+    $("#bonne-rep-son").addClass("hidden")
+    $("#mauvaise-rep-son").addClass("hidden")
+    $("#btn-reponse-son").fadeIn()
 }
 
 function verrouillageTheme(idTheme, idQuestion) {

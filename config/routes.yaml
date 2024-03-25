@@ -19,6 +19,12 @@ check_sons:
     options:
         expose: true
 
+check_sons_reponse:
+    path: /son/{sonId}/check/{jeuId}
+    defaults: { _controller: Son:checkSonReponse }
+    options:
+        expose: true
+
 check_reponse:
     path: /jeux/reponse/{id}/get
     defaults: { _controller: Jeux:getReponse }

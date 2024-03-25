@@ -86,16 +86,16 @@
 								{% set loopSons = loopSons + 1 %}
 								{% if (loopSons in [1, 4, 7, 10, 13, 16, 19, 22]) %}
 									<div class="row row-grid">
-										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons {% if (son.lock == true) %}card-disabled{% endif %}">
 											<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
 										</div>
 									{% elseif (loopSons in [3, 6, 9, 12, 15, 18, 21]) %}
-										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+										<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons {% if (son.lock == true) %}card-disabled{% endif %}">
 											<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
 										</div>
 									</div>
 								{% else %}
-									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons">
+									<div id="son-{{son.id}}" data-id="{{son.id}}" class="col-4 flex-center-div div-sons {% if (son.lock == true) %}card-disabled{% endif %}">
 										<img class="son-game" src="{{ asset('images/blind-test/' ~ son.id ~ '.png') }}" alt="">
 									</div>
 								{% endif %}
@@ -182,6 +182,7 @@
 						<button type="button" class="btn-close btn-close-modal-son" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div id="modal-son-body" class="modal-body">
+						<input type="hidden" id="son-id">
 						<div id="audio-div"></div>
 						<div class="container-fluid container-audio">
 							<div class="center">
@@ -196,11 +197,11 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button id="bonne-rep-son" type="button" class="btn btn-success hidden close-modal-reponse-son" data-bs-dismiss="modal">
+						<button id="bonne-rep-son" type="button" data-check="true" class="btn btn-success hidden close-modal-reponse-son" data-bs-dismiss="modal">
 							<i class="fa-solid fa-check"></i>
 							Bonne réponse
 						</button>
-						<button id="mauvaise-rep-son" type="button" class="btn btn-danger hidden close-modal-reponse-son" data-bs-dismiss="modal">
+						<button id="mauvaise-rep-son" type="button" data-check="false" class="btn btn-danger hidden close-modal-reponse-son" data-bs-dismiss="modal">
 							<i class="fa-solid fa-xmark"></i>
 							Mauvaise Réponse
 						</button>

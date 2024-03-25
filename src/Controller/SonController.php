@@ -3,17 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\Son;
+use App\Entity\Jeux;
 use App\Form\SonType;
+use App\Entity\Equipe;
+use App\Entity\ScoreEquipe;
 use App\Repository\SonRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/son')]
 class SonController extends AbstractController
 {
+
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     #[Route('/', name: 'app_son_index', methods: ['GET'])]
     public function index(SonRepository $sonRepository): Response
     {
@@ -79,9 +90,39 @@ class SonController extends AbstractController
         return $this->redirectToRoute('app_son_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{idSon}/check/', name: 'app_son_check', methods: ['GET','POST'])]
-    public function check(Request $request): Response
+    #[Route('/{idSon}/check/{idJeu}', name: 'app_son_check', methods: ['GET','POST'])]
+    public function checkSonReponse(Request $request): Response
     {
-        
+        $idSon = intval($request->get("idSon"));
+        $idJeu = intval($request->get("idJeu"));
+        $typeRep = boolval($request->get("typeRep"));
+        $equipeParam = intval($request->get("equipe"));
+        $score = 0;
+        $son = $this->em->getRepository(Son::class)->findOneById($idSon);
+        if($typeRep === true) {
+            $points = $son->getPoints();
+            $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
+            $equipe = $this->em->getRepository(Equipe::class)->findOneById($equipeParam);
+            $scoreEquipe = $this->em->getRepository(ScoreEquipe::class)->findOneBy([
+                "jeu" => $jeuCourant,
+                "equipe" => $equipe
+            ]);
+            if (!$scoreEquipe) {
+                $scoreEquipe = new ScoreEquipe();
+                $scoreEquipe->setJeu($jeuCourant);
+                $scoreEquipe->setEquipe($equipe);
+                $scoreEquipe->setScore(0);
+                $this->em->persist($scoreEquipe);
+            }
+            $scoreTmp = $scoreEquipe->getScore();
+            $updatedScore = $scoreTmp += $points;
+            $scoreEquipe->setScore($updatedScore);
+            $this->em->flush();
+        }
+
+        return $this->json([
+            "typeRep" => $typeRep,
+            "score" => $score
+        ]);
     }
 }

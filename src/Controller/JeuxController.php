@@ -172,6 +172,7 @@ class JeuxController extends AbstractController
         
         return $this->json([
             "son" => [
+                "id" => $son->getId(),
                 "categorie" => $son->getCategorie()->getNom(),
                 "src" => $sonSrc,
                 "reponse" => $son->getReponse()->getIntitule()

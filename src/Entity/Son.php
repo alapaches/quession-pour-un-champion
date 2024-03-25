@@ -26,6 +26,9 @@ class Son
     #[ORM\OneToOne(mappedBy: 'son', cascade: ['persist', 'remove'], fetch: "EAGER")]
     private ?Reponse $reponse = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $lock = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +88,18 @@ class Son
         }
 
         $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    public function isLock(): ?bool
+    {
+        return $this->lock;
+    }
+
+    public function setLock(bool $lock): static
+    {
+        $this->lock = $lock;
 
         return $this;
     }
