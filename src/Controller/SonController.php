@@ -95,10 +95,12 @@ class SonController extends AbstractController
     {
         $idSon = intval($request->get("idSon"));
         $idJeu = intval($request->get("idJeu"));
-        $typeRep = boolval($request->get("typeRep"));
+        $typeRep = json_decode($request->get("typeRep"));
         $equipeParam = intval($request->get("equipe"));
+        $data = [];
         $score = 0;
         $son = $this->em->getRepository(Son::class)->findOneById($idSon);
+        
         if($typeRep === true) {
             $points = $son->getPoints();
             $jeuCourant = $this->em->getRepository(Jeux::class)->findOneById($idJeu);
@@ -117,12 +119,15 @@ class SonController extends AbstractController
             $scoreTmp = $scoreEquipe->getScore();
             $updatedScore = $scoreTmp += $points;
             $scoreEquipe->setScore($updatedScore);
+            $son->setLock(true);
             $this->em->flush();
+
+            $data = [
+                "typeRep" => $typeRep,
+                "score" => $score
+            ];
         }
 
-        return $this->json([
-            "typeRep" => $typeRep,
-            "score" => $score
-        ]);
+        return $this->json($data);
     }
 }

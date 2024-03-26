@@ -317,8 +317,10 @@ function getResponseSon(typeRep) {
         type: 'GET',
         data: {'typeRep': typeRep, 'equipe': equipe},
         success: function(dataResponse) {
-            console.log(dataResponse)
-            typeRep === true ? $("#son-" + idSon).addClass("card-disabled") : ''
+            let dataLength = dataResponse.length
+            if(!dataLength || dataLength === 0) {
+                $("#son-" + idSon).addClass("card-disabled")
+            }
         },
         error: function(error) {
 
