@@ -23,18 +23,20 @@ $(function () {
     let idJeu = $("#jeu-id").val()
     if (idJeu !== "1") {
         $("#submit-form").addClass("hidden")
-        const routeGetScores = Routing.generate('get_score', { jeu: idJeu })
-        $.ajax({
-            url: routeGetScores,
-            type: 'GET',
-            success: function (response) {
-                let tabScores = response.tableauScores
-                $(tabScores).each(function (idx, val) {
-                    $("#score-equipe-" + val.equipe).text(val.score)
-                })
-            }
-        })
+        $("#next-question-div").addClass("hidden")
     }
+    idJeu === "3" ? $("#score-jeu-3").removeClass("hidden") : $("#score-jeu-3").addClass("hidden")
+    const routeGetScores = Routing.generate('get_score', { jeu: idJeu })
+    $.ajax({
+        url: routeGetScores,
+        type: 'GET',
+        success: function (response) {
+            let tabScores = response.tableauScores
+            $(tabScores).each(function (idx, val) {
+                $("#score-equipe-" + val.equipe).text(val.score)
+            })
+        }
+    })
     $(questionTheme).parent(".mb-3").addClass("hidden")
     $(questionDifficulte).parent(".mb-3").addClass("hidden")
     $(questionTheme).val(null)
@@ -55,6 +57,7 @@ $("#jeu-form").on("submit", function (e) {
     let proposition = $('input[name="list-proposition"]:checked')
     let propositionList = $(proposition).parent("li")
     let propositionValue = $(proposition).val()
+    
     if (!equipe || !propositionValue) {
         $("#toast-error").fadeIn()
         setTimeout(function () {
@@ -67,11 +70,13 @@ $("#jeu-form").on("submit", function (e) {
             type: 'POST',
             success: function (response) {
                 $(propositionList).children('input[name="list-proposition"]').prop("disabled", true)
+                $(propositionList).children('input[name="list-proposition"]').addClass("disabled-prop")
                 if (response.validation === true) {
                     $(propositionList).addClass("success")
                 } else {
                     $(propositionList).addClass("error")
                     $("#next-question").removeClass("hidden")
+                    disableAll()
                 }
                 proposition.prop('checked', false)
                 $("#score-equipe-" + equipe).text(response.scoreEquipe)
@@ -82,6 +87,15 @@ $("#jeu-form").on("submit", function (e) {
         })
     }
 })
+
+function disableAll() {
+    let propositions = $(".current-question > ul > li")
+    $(propositions).each(function() {
+        let input = $(this).children('input[name="list-proposition"]')
+        let isDisabled = $(input).hasClass("disabled-prop") ? true : false
+        isDisabled === false ? $(input).prop("disabled", true) : ""
+    })
+}
 
 $(".list-proposition").on("click", function (event) {
     $(this).hasClass("prop-selected") ? $(this).removeClass("prop-selected") : $(this).addClass("prop-selected")

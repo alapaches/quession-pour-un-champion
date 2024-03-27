@@ -18,11 +18,11 @@ class ScoreEquipe
     #[ORM\Column]
     private ?float $score = null;
 
-    #[ORM\ManyToOne(inversedBy: 'scoreEquipes')]
+    #[ORM\ManyToOne(inversedBy: 'scoreEquipes', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Jeux $jeu = null;
 
-    #[ORM\ManyToOne(inversedBy: 'scoreEquipes')]
+    #[ORM\ManyToOne(inversedBy: 'scoreEquipes', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Equipe $equipe = null;
 

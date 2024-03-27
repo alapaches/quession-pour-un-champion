@@ -21,6 +21,14 @@ class ScoreEquipeRepository extends ServiceEntityRepository
         parent::__construct($registry, ScoreEquipe::class);
     }
 
+    public function findAllGrouped()
+    {
+        $qb = $this->createQueryBuilder('score')->addGroupBy('score.jeu');
+        $query = $qb->getQuery()->getResult();
+
+        return $query;
+    }
+
 //    /**
 //     * @return ScoreEquipe[] Returns an array of ScoreEquipe objects
 //     */

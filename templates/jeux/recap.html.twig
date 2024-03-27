@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Récapitulatif{% endblock %}
+
+{% block body %}
+    <h1 class="center page-title">Récapitulatif des Scores</h1>
+    <div class="center">
+        {{ dump(tableauRecap) }}
+    </div>
+{% endblock %}

@@ -27,7 +27,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-8">
+				<div class="col-7">
 					<div class="card">
 						{% set loopIcons = 0 %}
 						{% set loopSons = 0 %}
@@ -103,7 +103,35 @@
 						{% endif %}
 					</div>
 				</div>
-				<div class="col-2 flex-center-div">
+				<div id="score-jeu-3" class="col-3 hidden">
+					<div class="card">
+						<div class="card-header text-bg-dark">
+							<strong>Liste des difficultés</strong>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+							{# {{ dump(sonCategories) }} #}
+								<table class="table table-bordered">
+									<thead class="sticky-header">
+										<tr>
+											<th class="center">Difficulté</th>
+											<th class="center">Points</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for categorie in sonCategories %}
+											<tr>
+												<td>{{categorie.categorie}}</td>
+												<td class="bold center">{{categorie.points}}</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="next-question-div" class="col-2 flex-center-div">
 					<button type="button" id="next-question" class="btn-circle btn-xl primary btn-next hidden">
 						<i class="fa-solid fa-arrow-right icon"></i>
 					</button>

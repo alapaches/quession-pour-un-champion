@@ -14,6 +14,8 @@ use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\JeuxRepository;
 use App\Service\AudioService;
+use PhpParser\Node\Expr\Cast\Object_;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,6 +39,36 @@ class JeuxController extends AbstractController
     {
         return $this->render('jeux/index.html.twig', [
             'jeux' => $jeuxRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/recap', name: 'app_jeux_recapitulatif', methods: ['GET'])]
+    public function recap(Request $request): Response
+    {
+        $tabRecapEquipes = [];
+        $equipes = $this->em->getRepository(Equipe::class)->findAll();
+        foreach($equipes as $equipe) {
+            $sTabEquipe = [];
+            $ssTabEquipe = [];
+            $scoreEquipe = $this->em->getRepository(ScoreEquipe::class)->findBy(["equipe" => $equipe->getId()]);
+            $scoreTotal = 0;
+            $nomEquipe = $equipe->getNom();
+            foreach($scoreEquipe as $sc) {
+                $ssTabJeu = [];
+                $score = $sc->getScore();
+                $scoreTotal = $scoreTotal + $score;
+                $jeu = $sc->getJeu()->getNom();
+                $ssTabJeu["nomJeu"] = $jeu;
+                $ssTabJeu["score"] = $score;
+                array_push($ssTabEquipe, $ssTabJeu);                
+            }
+            $sTabEquipe[$nomEquipe] = $ssTabEquipe;
+            $sTabEquipe[$nomEquipe]["total"] = $scoreTotal;
+            array_push($tabRecapEquipes, $sTabEquipe);
+        }        
+
+        return $this->render('jeux/recap.html.twig', [
+            "tableauRecap" => $tabRecapEquipes
         ]);
     }
 
@@ -93,6 +125,17 @@ class JeuxController extends AbstractController
         $themes = $this->em->getRepository(Theme::class)->findAll();
         $questions = $this->em->getRepository(Question::class)->findBy(array("jeu" => $jeu));
         $sons = $this->em->getRepository(Son::class)->findAll();
+        $tmpTabDifficulteSon = [];
+        foreach($sons as $son) {
+            $sTab = [];
+            $nomCategorie = $son->getCategorie()->getNom();
+            $pointsCategorie = $son->getPoints();
+            $sTab["categorie"] = $nomCategorie;
+            $sTab["points"] = $pointsCategorie;
+            array_push($tmpTabDifficulteSon, $sTab);
+        }
+        
+        $tabDifficulteSon = array_intersect_key($tmpTabDifficulteSon, array_unique(array_map('serialize', $tmpTabDifficulteSon)));
 
         return $this->render('jeux/running.html.twig', [
             'jeu' => $jeu,
@@ -100,6 +143,7 @@ class JeuxController extends AbstractController
             'equipes' => $equipes,
             'themes' => $themes,
             'sons' => $sons,
+            'sonCategories' => $tabDifficulteSon
         ]);
     }
 
@@ -147,7 +191,7 @@ class JeuxController extends AbstractController
                 $this->em->persist($scoreEquipe);
             }
             $scoreTmp = $scoreEquipe->getScore();
-            $updatedScore = $reponse === true ? $scoreTmp + 1 : $scoreTmp;
+            $updatedScore = $reponse === true ? $scoreTmp + 1 : $scoreTmp -1;
             $scoreEquipe->setScore($updatedScore);
 
             $this->em->flush();
