@@ -4,7 +4,48 @@
 
 {% block body %}
     <h1 class="center page-title">Récapitulatif des Scores</h1>
-    <div class="center">
+    <pre>
         {{ dump(tableauRecap) }}
+    </pre>
+    <div class="container-fluid">
+        <div class="row">
+            {% for scoreEquipe in tableauRecap %}
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-header text-bg-dark">
+                            <strong>{{scoreEquipe.nom}}</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="center">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="sticky-header">
+                                            <tr>
+                                                <th class="center">Jeu</th>
+                                                <th class="center">Points Gagnés</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for jeu in scoreEquipe.jeu %}
+                                                <tr>
+                                                    <td class="center">{{jeu.nomJeu}}</td>
+                                                    <td class="center">{{jeu.score}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td colspan="2">Total : {{scoreEquipe.total}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% for jeu in scoreEquipe.jeu %}
+                                
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

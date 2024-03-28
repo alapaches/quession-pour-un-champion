@@ -62,8 +62,10 @@ class JeuxController extends AbstractController
                 $ssTabJeu["score"] = $score;
                 array_push($ssTabEquipe, $ssTabJeu);                
             }
-            $sTabEquipe[$nomEquipe] = $ssTabEquipe;
-            $sTabEquipe[$nomEquipe]["total"] = $scoreTotal;
+            // $sTabEquipe[$nomEquipe] = $ssTabEquipe;
+            $sTabEquipe["nom"] = $nomEquipe;
+            $sTabEquipe["jeu"] = $ssTabEquipe;
+            $sTabEquipe["total"] = $scoreTotal;
             array_push($tabRecapEquipes, $sTabEquipe);
         }        
 
